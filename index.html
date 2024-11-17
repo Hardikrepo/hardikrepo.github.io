@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hardik Maru - info</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      border: 3px solid #007bff;
+      padding: 3px;
+      transition: transform 0.3s ease;
+    }
+
+    .profile-pic:hover {
+      transform: scale(1.05);
+    }
+
+    .name {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+    }
+
+    .title {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #666;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .skill-tag {
+      background: #e3f2fd;
+      color: #1976d2;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      text-align: justify;
+    }
+
+    .skill-tag:hover {
+      background: #1976d2;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .experience-item, .education-item {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-left: 3px solid #007bff;
+      background: #f8f9fa;
+      border-radius: 0 4px 4px 0;
+      transition: all 0.3s ease;
+      text-align: justify;
+    }
+
+    .experience-item:hover, .education-item:hover {
+      transform: translateX(10px);
+      background: #f0f4f8;
+    }
+
+    .date {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .company, .institution {
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    .role, .degree {
+      color: #1976d2;
+      margin-bottom: 0.5rem;
+    }
+
+    .print-button {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #007bff;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      text-decoration: none;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+    }
+
+    .print-button:hover {
+      background: #0056b3;
+      transform: translateY(-2px);
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+      .container {
+        box-shadow: none;
+        margin: 0;
+        padding: 1rem;
+      }
+      .print-button {
+        display: none;
+      }
+      .experience-item, .education-item {
+        break-inside: avoid;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      .contact-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+      }
+      .name {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Header Section -->
+  <header class="header">
+    <!--<img src="/api/placeholder/150/150" alt="Profile Picture" class="profile-pic">-->
+   <h1 class="name">Hardik Maru</h1>
+   <p class="title">Cloud Engineer</p>
+   <div class="contact-info">
+     <div class="contact-item">
+       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+       </svg>
+       <span>https://www.linkedin.com/in/hardik-maru-1a220462/</span>
+     </div>
+
+     <div class="contact-item">
+       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+         <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+       </svg>
+       <span>+91-9426580172</span>
+
+     </div>
+     <div class="contact-item">
+       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+         <circle cx="12" cy="10" r="3"/>
+       </svg>
+       <span>India</span>
+     </div>
+
+   </div>
+    <span>Demo Projects: https://github.com/Hardikrepo</span>
+ </header>
+
+ <!-- Summary Section -->
+  <section class="section" id="summary">
+    <h2 class="section-title">Key Accomplishments</h2>
+    <p class="contact-info"> Hardik is an experienced software engineer with 5 plus years of experience delivering IT solutions for internet
+      and intranet web applications. He also has over 3 years of experience as an AWS Cloud Development Operations
+      specialist, with skills in Amazon cloud technologies and distributed systems. Hardik specializes in CI/CD pipeline
+      automation, cloud deployment, backend systems, with a strong command of No SQL and relational databases. He
+      is a Terraform developer experienced in managing large-scale cloud services using continuous integration and
+      deployment strategies. Hardik has a track record of deploying resilient and scalable cloud-based systems using
+      Terraform and YAML templates. In addition, he has experience in consulting for distributed control systems, implementing
+      Agile methodologies.</p>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="section" id="skills">
+    <h2 class="section-title">Technical Skills</h2>
+    <div class="skill-tags">
+      <span class="skill-tag">NOSQL</span>
+      <span class="skill-tag">SQL</span>
+      <span class="skill-tag">AWS</span>
+      <span class="skill-tag">Storage</span>
+      <span class="skill-tag">Networking</span>
+      <span class="skill-tag">Compute</span>
+      <span class="skill-tag">Git and github</span>
+      <span class="skill-tag">CI/CD</span>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="section" id="experience">
+    <h2 class="section-title">Work Experience</h2>
+    <div class="experience-item">
+      <div class="date">Aug 2023 - May 2024</div>
+      <div class="company">GLWA | Consultant | Detroit - USA </div>
+      <div class="role">Consultant</div>
+      <ul>
+        <li>
+          Project - Veritiv Power Backup Management and
+          onsite resource management | GLWA</li>
+        <li>Primary Roles: Software consultant</li>
+         <li> Responsibility: As a consultant, I analyzed network infrastructure and control systems hybrid and on-premise
+          managed diagnostics and distributed control system measurements. In addition, I used SolarWinds to carry out
+           network analysis and reporting. Ovation Emerson for the distributed controls analysis and reporting.</li>
+          <li>Tools and Technologies:
+          Emmerson enterprise software and hardware, SolarWinds and OWL monitoring system, ORACLE server, Vertiv
+          Products and software, smart sheets GLWA consultant from the PCI LLC. Where my responsibilities are to give
+            consultations for the resources. Onsite and hybrid environments.</li>
+        </li>
+      </ul>
+    </div>
+    <div class="experience-item">
+      <div class="date">Nov 2017 - Jul 2018</div>
+      <div class="company">LTIET | Rajkot, India</div>
+      <div class="role">Primary Roles: Cloud Software Engineer</div>
+      <ul>
+        <li>
+          Frontend, Middleware systems and backend systems maintenance and management.
+        </li>
+        <li>
+          Responsibility: Developed and maintained on-premise private cloud-based applications, focusing on system
+          scalability and performance. Using the Windows deployment environment at LTIET, I managed web apps for
+          Internet and intranet use. I delivered new organizational app enhancement features and streamlined web app
+          processes; it allows systems to optimize the web results.
+          Tools and Technologies:
+          Windows server, MySQL server, Apache tomcat web hosting services, IBM server for the exams, Android systems
+          set up for the applications development and testing environment in open-source tools.
+        </li>
+      </ul>
+    </div>
+    <div class="experience-item">
+      <div class="date">July 2014 – Nov 2017</div>
+      <div class="company">Micro mind Tech - Rajkot, India</div>
+      <div class="role">Primary Roles: Cloud Software Engineer</div>
+      <ul>
+        <li>
+          Responsibility: At Micro Mind Tech, I developed user-centric business solutions utilizing the Model- View-
+          Controller (MVC) architecture to interact with the internet and intranet. Enhanced the internal design of the
+          systems, leading to improved efficiency and streamlined processes. Performed specific upgrade tasks for Java
+          software products, resulting in enhanced functionality and improved performance. My contributions significantly
+          impacted the user experience and optimized business operations.
+        </li>
+        <li>
+          Tools and technologies:
+          Spring Framework, Hibernate, JAVA, EJB, R programming, Design patterns using java, MySQL, Microsoft SQL
+          Server, API integration, PHP, HTML, CSS, JavaScript and advanced frameworks, Caching - In memory,
+          Distributed and Disk-based cache, Git, Apache Tomcat
+        </li>
+      </ul>
+    </div>
+    <div class="experience-item">
+      <div class="date">June-2011- June 2012</div>
+      <div class="company">IT-netting - Avani computers </div>
+      <div class="role">Summer vacation intern program</div>
+      <ul>
+        <li>
+          Primary Roles: Hardware Engineer</li>
+          <li>Responsibility: Worked as a junior engineer, designing circuit data sheets for analyzing and replacing electronic
+          components of motherboards, such as LCDs and other hardware. Identified and rectified issues related to the
+          motherboard electronics, ensuring optimal performance of the system. Proficiency in circuit design and analysis
+          enabled me to effectively troubleshoot problems and provide solutions, which was beneficial to enhancing their
+          hardware technology experience. Maintained inventory of computer, server, and electronics device data sheets
+          from the corporate web portal and implemented solutions for clients. Familiar for problem solver for IT software
+            and hardware.
+          </li>
+        </li>
+      </ul>
+    </div>
+
+  </section>
+
+  <!-- Education Section -->
+  <section class="section" id="education">
+    <h2 class="section-title">Education</h2>
+    <div class="education-item">
+      <div class="date">Sep 2022 - Feb 2024</div>
+      <div class="institution">DeVry University-Illinois, Chicago Illinois</div>
+      <div class="degree">Masters in Information system and Maangement Security - GPA-3.58</div>
+      <div class="degree">Bechlore's in computer Engineering</div>
+      <div class="degree">Diploma in computer Eigineering</div>
+
+    </div>
+  </section>
+
+  <!-- Certifications Section -->
+  <section class="section" id="certifications">
+    <h2 class="section-title">Certifications</h2>
+    <div class="education-item">
+      <div class="date">Year - 2024</div>
+      <div class="institution">AWS Consultant</div>
+    </div>
+
+  </section>
+  <section class="section" id="certifications">
+    <h2 class="section-title">Projects Demo</h2>
+    <div class="education-item">
+      <div class="date">Year - 2024</div>
+      <div class="institution">
+        <ul>
+          <li>DevOps Demonstrated services proficiency:</li>
+          <li>
+            AWS Cloud Development kit demo with the CI/CD</li>
+          <li>AWS Developed AI driven chat app</li>
+          <li>AWS Storage, Network, compute services</li>
+        </ul>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<a href="#" class="print-button" onclick="window.print(); return false;">
+  Print Resume
+</a>
+
+<script>
+  // Animate sections on scroll
+  function checkVisibility() {
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      const isVisible = (rect.top <= window.innerHeight * 0.8);
+      if (isVisible) {
+        section.classList.add('visible');
+      }
+    });
+  }
+
+  // Initialize visibility check
+  window.addEventListener('load', checkVisibility);
+  window.addEventListener('scroll', checkVisibility);
+
+  // Skill tag interaction
+  const skillTags = document.querySelectorAll('.skill-tag');
+  skillTags.forEach(tag => {
+    tag.addEventListener('click', () => {
+      tag.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        tag.style.transform = 'scale(1)';
+      }, 200);
+    });
+  });
+
+  // Profile picture animation
+  const profilePic = document.querySelector('.profile-pic');
+  profilePic.addEventListener('mouseover', () => {
+    profilePic.style.transform = 'scale(1.05) rotate(5deg)';
+  });
+  profilePic.addEventListener('mouseout', () => {
+    profilePic.style.transform = 'scale(1) rotate(0deg)';
+  });
+
+  // Print functionality
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'p') {
+      e.preventDefault();
+      window.print();
+    }
+  });
+
+  // Add hover effect to contact items
+  const contactItems = document.querySelectorAll('.contact-item');
+  contactItems.forEach(item => {
+    item.addEventListener('mouseover', () => {
+      item.style.color = '#007bff';
+    });
+    item.addEventListener('mouseout', () => {
+      item.style.color = '#666';
+    });
+  });
+</script>
+</body>
+</html>
