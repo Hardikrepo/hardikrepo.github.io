@@ -1,0 +1,473 @@
+<title>Hardik Maru — Infrastructure &amp; AI Tooling</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="DevOps engineer working across AWS, GCP, and Azure — Terraform, Kubernetes, CI/CD, and AI-assisted operations tooling.">
+<style>
+  /* ---------- tokens ---------- */
+  :root {
+    --paper: #eef1f6;
+    --paper-dot: rgba(20, 35, 74, 0.06);
+    --tile: #ffffff;
+    --line: #dde3ec;
+    --line-strong: #c3ccdd;
+    --ink: #10131a;
+    --ink-soft: #4a5166;
+    --ink-faint: #7a8298;
+    --accent: #2f52e0;
+    --tint: #e7ebfc;
+    --on-accent: #eef1ff;
+    --hero-a: #0a1240;
+    --hero-b: #1f3bb0;
+    --hero-ink: #eef1ff;
+    --hero-mute: rgba(238, 241, 255, 0.72);
+    --hero-line: rgba(238, 241, 255, 0.13);
+    --hero-edge: rgba(238, 241, 255, 0.32);
+    --tick: #6f8bff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #080a11;
+      --paper-dot: rgba(150, 170, 255, 0.055);
+      --tile: #10131d;
+      --line: #1d2434;
+      --line-strong: #2b3449;
+      --ink: #e8eaf3;
+      --ink-soft: #9aa3bf;
+      --ink-faint: #5f6886;
+      --accent: #6f8bff;
+      --tint: #141b30;
+      --on-accent: #060811;
+      --hero-a: #060a26;
+      --hero-b: #16225f;
+      --hero-ink: #eef1ff;
+      --hero-mute: rgba(238, 241, 255, 0.66);
+      --hero-line: rgba(238, 241, 255, 0.10);
+      --hero-edge: rgba(238, 241, 255, 0.28);
+      --tick: #6f8bff;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #080a11; --paper-dot: rgba(150, 170, 255, 0.055);
+    --tile: #10131d; --line: #1d2434; --line-strong: #2b3449;
+    --ink: #e8eaf3; --ink-soft: #9aa3bf; --ink-faint: #5f6886;
+    --accent: #6f8bff; --tint: #141b30; --on-accent: #060811;
+    --hero-a: #060a26; --hero-b: #16225f; --hero-ink: #eef1ff;
+    --hero-mute: rgba(238, 241, 255, 0.66);
+    --hero-line: rgba(238, 241, 255, 0.10);
+    --hero-edge: rgba(238, 241, 255, 0.28);
+    --tick: #6f8bff;
+  }
+  :root[data-theme="light"] {
+    --paper: #eef1f6; --paper-dot: rgba(20, 35, 74, 0.06);
+    --tile: #ffffff; --line: #dde3ec; --line-strong: #c3ccdd;
+    --ink: #10131a; --ink-soft: #4a5166; --ink-faint: #7a8298;
+    --accent: #2f52e0; --tint: #e7ebfc; --on-accent: #eef1ff;
+    --hero-a: #0a1240; --hero-b: #1f3bb0; --hero-ink: #eef1ff;
+    --hero-mute: rgba(238, 241, 255, 0.72);
+    --hero-line: rgba(238, 241, 255, 0.13);
+    --hero-edge: rgba(238, 241, 255, 0.32);
+    --tick: #6f8bff;
+  }
+
+  /* ---------- base ---------- */
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    background-image: radial-gradient(var(--paper-dot) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  .mono { font-family: ui-monospace, "Cascadia Code", "SF Mono", "JetBrains Mono", Consolas, "Liberation Mono", monospace; }
+  a { color: inherit; }
+  h1, h2, h3 { text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+
+  a:focus-visible, .tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  a.tile:focus-visible { outline-offset: -2px; }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 22px 0 20px;
+  }
+  .wordmark { display: inline-flex; align-items: center; gap: 10px; font-weight: 750; font-size: 14px; letter-spacing: -0.01em; text-decoration: none; }
+  .wordmark .sq { width: 10px; height: 10px; background: var(--accent); flex: none; }
+  .masthead nav { display: flex; gap: 20px; }
+  .masthead nav a {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12.5px; color: var(--ink-soft); text-decoration: none;
+  }
+  .masthead nav a:hover { color: var(--accent); }
+
+  /* ---------- hero : the one bold move ---------- */
+  .hero {
+    position: relative;
+    background: radial-gradient(900px 420px at 82% -12%, var(--hero-line), transparent 62%),
+                linear-gradient(155deg, var(--hero-b), var(--hero-a) 72%);
+    color: var(--hero-ink);
+    padding: clamp(36px, 6vw, 64px) clamp(24px, 5vw, 56px) 0;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, var(--hero-line) 0 1px, transparent 1px 34px),
+      repeating-linear-gradient(90deg, var(--hero-line) 0 1px, transparent 1px 34px);
+    pointer-events: none;
+  }
+  .hero > * { position: relative; }
+  .hero .eyebrow {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--hero-mute);
+  }
+  .hero h1 {
+    margin-top: 18px;
+    font-size: clamp(46px, 7.5vw, 78px);
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+  }
+  .hero .lede {
+    margin-top: 22px;
+    font-size: clamp(15.5px, 1.7vw, 17.5px);
+    max-width: 58ch;
+    color: var(--hero-mute);
+  }
+  .hero .lede strong { color: var(--hero-ink); font-weight: 650; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .hero-actions a {
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 11px 20px;
+    border: 1px solid var(--hero-edge);
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 13px; font-weight: 600;
+    color: var(--hero-ink); text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  .hero-actions a.solid { background: var(--hero-ink); color: var(--hero-a); border-color: var(--hero-ink); }
+  .hero-actions a:hover { background: var(--hero-ink); color: var(--hero-a); border-color: var(--hero-ink); }
+  .hero-actions a.solid:hover { background: transparent; color: var(--hero-ink); border-color: var(--hero-edge); }
+
+  .hero-status {
+    margin-top: clamp(32px, 5vw, 52px);
+    border-top: 1px solid var(--hero-line);
+    padding: 16px 0 18px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12.5px;
+  }
+  .hero-status .op { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; }
+  .hero-status .loc { color: var(--hero-mute); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--tick); box-shadow: 0 0 0 3px color-mix(in srgb, var(--tick) 24%, transparent); flex: none; }
+  @media (prefers-reduced-motion: no-preference) { .dot { animation: pulse 2.4s ease-in-out infinite; } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .ticks {
+    height: 12px; margin: 0 calc(-1 * clamp(24px, 5vw, 56px));
+    background: repeating-linear-gradient(90deg, var(--tick) 0 5px, transparent 5px 10px);
+    opacity: 0.85;
+  }
+
+  /* ---------- metrics strip ---------- */
+  .metrics {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    background: var(--tile); border: 1px solid var(--line); border-top: none;
+  }
+  .metric { padding: 22px 24px 20px; }
+  .metric + .metric { border-left: 1px solid var(--line); }
+  .metric .n {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(28px, 3.6vw, 38px); font-weight: 700; line-height: 1;
+    color: var(--accent);
+  }
+  .metric .l {
+    display: block; margin-top: 8px;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- stack strip ---------- */
+  .stack {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    border: 1px solid var(--line); border-top: none; background: var(--tile);
+    padding: 14px 24px;
+  }
+  .stack .l {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-faint); flex: none;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12px; font-weight: 600; padding: 4px 10px;
+    background: var(--tint); color: var(--accent);
+  }
+
+  /* ---------- section heads ---------- */
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
+    margin: 64px 0 20px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+  .section-head h2 { font-size: 21px; font-weight: 750; letter-spacing: -0.015em; display: flex; align-items: center; gap: 12px; }
+  .section-head h2::before { content: ""; width: 9px; height: 9px; background: var(--accent); flex: none; }
+  .section-head .count {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12px; color: var(--ink-faint); white-space: nowrap;
+  }
+
+  /* ---------- bento ---------- */
+  .bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(96px, auto); grid-auto-flow: dense; gap: 16px; }
+  .c2 { grid-column: span 2; }
+  .c4 { grid-column: span 4; }
+  .r2 { grid-row: span 2; }
+  .tile {
+    border-radius: 0;
+    border: 1px solid var(--line);
+    background: var(--tile);
+    padding: 24px;
+    display: flex; flex-direction: column;
+    text-decoration: none; color: inherit;
+    position: relative; overflow: hidden;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  }
+  a.tile:hover { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .tile.tint { background: var(--tint); border-color: color-mix(in srgb, var(--accent) 32%, var(--line)); }
+
+  /* project tiles */
+  .tile-proj { justify-content: space-between; gap: 14px; }
+  .proj-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .proj-name {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-weight: 700; font-size: 15px; letter-spacing: -0.01em;
+    transition: color 0.15s ease;
+  }
+  a.tile:hover .proj-name { color: var(--accent); }
+  .pill {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 10px; white-space: nowrap; flex: none;
+  }
+  .pill-live { background: var(--accent); color: var(--on-accent); }
+  .pill-build { background: transparent; color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .proj-desc { font-size: 13.5px; color: var(--ink-soft); flex: 1; max-width: 62ch; }
+  .proj-foot {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding-top: 12px; border-top: 1px solid var(--line);
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 12px; color: var(--ink-faint);
+  }
+  .lang { display: inline-flex; align-items: center; gap: 7px; }
+  .lang::before { content: ""; width: 8px; height: 8px; background: var(--accent); }
+  .go { color: var(--accent); opacity: 0; transform: translate(-4px, 4px); transition: opacity 0.15s ease, transform 0.15s ease; }
+  a.tile:hover .go, a.tile:focus-visible .go { opacity: 1; transform: translate(0, 0); }
+  @media (prefers-reduced-motion: reduce) { .go { transform: none; } }
+
+  /* mini tiles (coursework) */
+  .tile-mini { justify-content: center; gap: 5px; }
+  .tile-mini .name { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-weight: 700; font-size: 13px; transition: color 0.15s ease; }
+  a.tile:hover .name { color: var(--accent); }
+  .tile-mini .desc { font-size: 12.5px; color: var(--ink-soft); }
+  .tile-more {
+    justify-content: center; align-items: center; text-align: center;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    color: var(--accent); font-weight: 700; font-size: 13px;
+    background: var(--tint);
+    border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line));
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+  a.tile-more:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); box-shadow: none; }
+
+  /* oss tiles */
+  .tile-oss { justify-content: center; gap: 7px; }
+  .tile-oss .repo { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 12px; font-weight: 700; color: var(--accent); }
+  .tile-oss .line { font-size: 14.5px; font-weight: 650; letter-spacing: -0.01em; }
+  .tile-oss .desc { font-size: 12.5px; color: var(--ink-soft); }
+  .tile-oss .go { position: absolute; top: 18px; right: 20px; }
+  .tile-oss code { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 0.92em; }
+
+  /* ---------- footer ---------- */
+  footer { margin-top: 72px; border-top: 1px solid var(--line-strong); padding: 30px 0 64px; font-size: 13px; color: var(--ink-faint); }
+  footer .prompt { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 14px; color: var(--ink-soft); }
+  footer .prompt .accent { color: var(--accent); }
+  .foot-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+  .foot-row a { color: var(--accent); text-decoration: none; font-weight: 600; }
+  .foot-row a:hover { text-decoration: underline; }
+  .colophon { margin-top: 26px; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 11.5px; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 760px) {
+    .bento { grid-template-columns: repeat(2, 1fr); }
+    .c4 { grid-column: span 2; }
+    .r2 { grid-row: auto; }
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    .metric:nth-child(odd) { border-left: none; }
+    .metric:nth-child(n+3) { border-top: 1px solid var(--line); }
+  }
+  @media (max-width: 440px) {
+    .bento { grid-template-columns: 1fr; }
+    .c2, .c4 { grid-column: span 1; }
+    .stack { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .masthead nav { gap: 14px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <a class="wordmark" href="https://github.com/Hardikrepo"><span class="sq" aria-hidden="true"></span>hardik maru</a>
+    <nav>
+      <a href="https://github.com/Hardikrepo">github ↗</a>
+      <a href="https://www.linkedin.com/in/hardik-maru-1a220462/">linkedin ↗</a>
+    </nav>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow">Hardikrepo · DevOps / Platform · AWS Specialist</p>
+    <h1>Infrastructure that ships itself.</h1>
+    <p class="lede"><strong>Hardik Maru</strong> — DevOps engineer building and automating cloud infrastructure across AWS, GCP, and Azure. Terraform, Kubernetes, and CI/CD as the base layer; lately, AI-assisted operations — log analysis and Claude-based agents wired into the pipeline — on top.</p>
+    <div class="hero-actions">
+      <a class="solid" href="https://www.linkedin.com/in/hardik-maru-1a220462/">Connect on LinkedIn ↗</a>
+      <a href="https://github.com/Hardikrepo">Browse the repos ↗</a>
+    </div>
+    <div class="hero-status">
+      <span class="op"><span class="dot" aria-hidden="true"></span> All systems operational</span>
+      <span class="loc">Open to infrastructure &amp; AI-tooling work · India &amp; remote, worldwide</span>
+    </div>
+    <div class="ticks" aria-hidden="true"></div>
+  </header>
+
+  <div class="metrics">
+    <div class="metric"><span class="n">26</span><span class="l">public repositories</span></div>
+    <div class="metric"><span class="n">3</span><span class="l">cloud platforms</span></div>
+    <div class="metric"><span class="n">4</span><span class="l">deployed infra projects</span></div>
+    <div class="metric"><span class="n">6</span><span class="l">OSS repos contributed to</span></div>
+  </div>
+
+  <div class="stack">
+    <span class="l">Core stack</span>
+    <div class="tags">
+      <span class="tag">AWS</span><span class="tag">Terraform</span><span class="tag">Kubernetes</span><span class="tag">Docker</span><span class="tag">GitHub Actions</span><span class="tag">OIDC</span>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <h2>Deployed &amp; active</h2>
+    <span class="count">4 services</span>
+  </div>
+  <div class="bento">
+    <a class="tile tile-proj tint c2 r2" href="https://github.com/Hardikrepo/gitops-aws-terraform-oidc">
+      <div class="proj-top"><span class="proj-name">gitops-aws-terraform-oidc</span><span class="pill pill-live">deployed</span></div>
+      <p class="proj-desc">Multi-env (dev/staging/prod) Terraform, GitHub Actions assuming AWS IAM roles via OIDC — no stored access keys. Bootstrap applied to a live AWS account; includes a Claude-based agent that detects stuck Terraform state locks and a plan-reviewer that flags risky changes on every PR.</p>
+      <div class="proj-foot"><span class="lang">HCL</span><span>updated Jul 14 <span class="go">↗</span></span></div>
+    </a>
+
+    <a class="tile tile-proj c2" href="https://github.com/Hardikrepo/aws-autoscaling-web-tier">
+      <div class="proj-top"><span class="proj-name">aws-autoscaling-web-tier</span><span class="pill pill-live">deployed</span></div>
+      <p class="proj-desc">Production-shaped ALB + Auto Scaling web tier: multi-environment, private subnets, WAF, IMDSv2, CI/CD and automated tests.</p>
+      <div class="proj-foot"><span class="lang">HCL</span><span>updated Jul 14 <span class="go">↗</span></span></div>
+    </a>
+
+    <a class="tile tile-proj c2" href="https://github.com/Hardikrepo/ai-aws-log-analyzer">
+      <div class="proj-top"><span class="proj-name">ai-aws-log-analyzer</span><span class="pill pill-build">active build</span></div>
+      <p class="proj-desc">CLI that pulls logs from AWS, GCP, and Azure and hands them to an LLM for anomaly detection, security triage, cost insight, and free-form chat.</p>
+      <div class="proj-foot"><span class="lang">Python</span><span>updated Jul 9 <span class="go">↗</span></span></div>
+    </a>
+
+    <a class="tile tile-proj c4" href="https://github.com/Hardikrepo/ci-cd">
+      <div class="proj-top"><span class="proj-name">ci-cd</span><span class="pill pill-live">live</span></div>
+      <p class="proj-desc">Static site deployed to AWS S3 + CloudFront through GitHub Actions, authenticated with OIDC-based IAM instead of long-lived credentials.</p>
+      <div class="proj-foot"><span class="lang">HTML</span><span>updated Jul 7 <span class="go">↗</span></span></div>
+    </a>
+  </div>
+
+  <div class="section-head">
+    <h2>Workshop &amp; coursework</h2>
+    <span class="count">smaller, scenario-based builds</span>
+  </div>
+  <div class="bento">
+    <a class="tile tile-mini c2" href="https://github.com/Hardikrepo/Management-Projects-samples">
+      <span class="name">Management-Projects-samples</span>
+      <span class="desc">Scenario-based IT &amp; management case studies, incl. a product-development and org-change project.</span>
+    </a>
+    <a class="tile tile-mini" href="https://github.com/Hardikrepo/AWS-Latest-DevOps-Demo">
+      <span class="name">AWS-Latest-DevOps-Demo</span>
+      <span class="desc">Notebook walkthrough of current AWS DevOps services.</span>
+    </a>
+    <a class="tile tile-mini" href="https://github.com/Hardikrepo/FINANCIAL-ANALYSIS">
+      <span class="name">FINANCIAL-ANALYSIS</span>
+      <span class="desc">Accounts &amp; finance analysis project.</span>
+    </a>
+    <a class="tile tile-mini" href="https://github.com/Hardikrepo/Database-sample-Project">
+      <span class="name">Database-sample-Project</span>
+      <span class="desc">Designing and organizing structured data.</span>
+    </a>
+    <a class="tile tile-mini" href="https://github.com/Hardikrepo/AWS-Service-Demo">
+      <span class="name">AWS-Service-Demo</span>
+      <span class="desc">Reports surveying core AWS services.</span>
+    </a>
+    <a class="tile tile-more c2" href="https://github.com/Hardikrepo?tab=repositories">+21 more repositories on GitHub ↗</a>
+  </div>
+
+  <div class="section-head">
+    <h2>Upstream contributions</h2>
+    <span class="count">PRs into other people's repos</span>
+  </div>
+  <div class="bento">
+    <a class="tile tile-oss c2" href="https://github.com/apple/swift-cassandra-client/pulls?q=is%3Apr+author%3AHardikrepo">
+      <span class="repo">apple / swift-cassandra-client</span>
+      <span class="line">Stacked PRs: Decodable query support</span>
+      <span class="desc">Explicit <code>withModelType:</code> overloads, paginated queries, richer error context, deployment-target bump.</span>
+      <span class="go">↗</span>
+    </a>
+    <a class="tile tile-oss c2" href="https://github.com/NVIDIA/cloud-native-stack/pulls?q=is%3Apr+author%3AHardikrepo">
+      <span class="repo">NVIDIA / cloud-native-stack</span>
+      <span class="line">GB200 / Ubuntu runtime fixes</span>
+      <span class="desc">Idempotent Helm installs and Kubernetes 1.35 support.</span>
+      <span class="go">↗</span>
+    </a>
+    <a class="tile tile-oss c2" href="https://github.com/aws/aws-cli/pull/10456">
+      <span class="repo">aws / aws-cli</span>
+      <span class="line">UTF-8 fix for MCP config files</span>
+      <span class="desc">Plus <code>--redirect-port</code> support for SSO login.</span>
+      <span class="go">↗</span>
+    </a>
+    <a class="tile tile-oss c2" href="https://github.com/nasa/osal/pull/1559">
+      <span class="repo">nasa / osal</span>
+      <span class="line">Fixed a stack-buffer-overflow</span>
+      <span class="desc">Also an incorrect <code>statvfs</code> block size and a path-traversal issue.</span>
+      <span class="go">↗</span>
+    </a>
+    <a class="tile tile-oss c2" href="https://github.com/apple/pir-service-example/pull/116">
+      <span class="repo">apple / pir-service-example</span>
+      <span class="line">Error API adoption</span>
+      <span class="desc">Client-facing server errors, plus a troubleshooting doc for a context-refresh workaround.</span>
+      <span class="go">↗</span>
+    </a>
+    <a class="tile tile-oss c2" href="https://github.com/aws/serverless-application-model/pull/3948">
+      <span class="repo">aws / serverless-application-model</span>
+      <span class="line">Fixes for #3911 and #3939</span>
+      <span class="desc">Bug fixes merged upstream into SAM.</span>
+      <span class="go">↗</span>
+    </a>
+  </div>
+
+  <footer>
+    <p class="prompt">hardik@devops<span class="accent">:~$</span> contact --linkedin</p>
+    <div class="foot-row">
+      <a href="https://www.linkedin.com/in/hardik-maru-1a220462/">linkedin.com/in/hardik-maru-1a220462</a>
+      <span class="mono">github.com/Hardikrepo</span>
+    </div>
+    <p class="colophon">© 2026 Hardik Maru · single HTML file, system fonts, no frameworks, no trackers</p>
+  </footer>
+
+</div>
