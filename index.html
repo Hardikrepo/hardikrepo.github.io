@@ -260,6 +260,10 @@
   .pill-live { background: var(--accent); color: var(--on-accent); }
   .pill-build { background: transparent; color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
   .proj-desc { font-size: 13.5px; color: var(--ink-soft); flex: 1; max-width: 62ch; }
+  .proj-media {
+    width: 100%; height: auto; max-height: 360px; object-fit: cover; object-position: top;
+    border: 1px solid var(--line); background: var(--paper); display: block;
+  }
   .proj-foot {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
     padding-top: 12px; border-top: 1px solid var(--line);
@@ -334,7 +338,7 @@
   <header class="hero">
     <p class="eyebrow">Hardikrepo · DevOps / Platform · AWS Specialist</p>
     <h1>Infrastructure that ships itself.</h1>
-    <p class="lede"><strong>Hardik Maru</strong> — DevOps engineer building and automating cloud infrastructure across AWS, GCP, and Azure. Terraform, Kubernetes, and CI/CD as the base layer; lately, AI-assisted operations — log analysis and Claude-based agents wired into the pipeline — on top.</p>
+    <p class="lede"><strong>Hardik Maru</strong> — DevOps engineer building and automating cloud infrastructure across AWS, GCP, and Azure. Terraform, Kubernetes, and CI/CD as the base layer; lately, AI-assisted operations and automated incident analysis on top.</p>
     <div class="hero-actions">
       <a class="solid" href="https://www.linkedin.com/in/hardik-maru-1a220462/">Connect on LinkedIn ↗</a>
       <a href="https://github.com/Hardikrepo">Browse the repos ↗</a>
@@ -347,7 +351,7 @@
   </header>
 
   <div class="metrics">
-    <div class="metric"><span class="n">26</span><span class="l">public repositories</span></div>
+    <div class="metric"><span class="n">27</span><span class="l">public repositories</span></div>
     <div class="metric"><span class="n">3</span><span class="l">cloud platforms</span></div>
     <div class="metric"><span class="n">4</span><span class="l">deployed infra projects</span></div>
     <div class="metric"><span class="n">6</span><span class="l">OSS repos contributed to</span></div>
@@ -362,12 +366,19 @@
 
   <div class="section-head">
     <h2>Deployed &amp; active</h2>
-    <span class="count">4 services</span>
+    <span class="count">5 featured builds</span>
   </div>
   <div class="bento">
+    <a class="tile tile-proj tint c4" href="https://github.com/Hardikrepo/orbinexa-commerce-platform">
+      <div class="proj-top"><span class="proj-name">orbinexa-commerce-platform</span><span class="pill pill-build">local demo</span></div>
+      <img class="proj-media" src="assets/orbinexa-platform-demo.gif" alt="Privacy-redacted Orbinexa storefront, administration panel, and developer portal demonstration">
+      <p class="proj-desc">Enterprise e-commerce and DevSecOps reference platform with a modern storefront, administration console, developer portal, TypeScript API, PostgreSQL, Redis, Docker Compose, Terraform, Amazon EKS, Helm, GitHub Actions, GitOps, security controls, observability, architecture diagrams, and beginner deployment guides.</p>
+      <div class="proj-foot"><span class="lang">TypeScript / HCL</span><span>published Jul 16 <span class="go">→</span></span></div>
+    </a>
+
     <a class="tile tile-proj tint c2 r2" href="https://github.com/Hardikrepo/gitops-aws-terraform-oidc">
       <div class="proj-top"><span class="proj-name">gitops-aws-terraform-oidc</span><span class="pill pill-live">deployed</span></div>
-      <p class="proj-desc">Multi-env (dev/staging/prod) Terraform, GitHub Actions assuming AWS IAM roles via OIDC — no stored access keys. Bootstrap applied to a live AWS account; includes a Claude-based agent that detects stuck Terraform state locks and a plan-reviewer that flags risky changes on every PR.</p>
+      <p class="proj-desc">Multi-env (dev/staging/prod) Terraform, GitHub Actions assuming AWS IAM roles via OIDC — no stored access keys. Bootstrap applied to a live AWS account; includes automated stuck-state detection and a plan-reviewer that flags risky changes on every PR.</p>
       <div class="proj-foot"><span class="lang">HCL</span><span>updated Jul 14 <span class="go">↗</span></span></div>
     </a>
 
