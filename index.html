@@ -1,484 +1,1225 @@
-<title>Hardik Maru — Infrastructure &amp; AI Tooling</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="DevOps engineer working across AWS, GCP, and Azure — Terraform, Kubernetes, CI/CD, and AI-assisted operations tooling.">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hardik Maru — Cloud Architect &amp; GenAI Infrastructure</title>
+<meta name="description" content="Hardik Maru — Cloud Architect, DevOps/SRE Engineer, and GenAI Infrastructure Specialist. AWS, Terraform, Kubernetes, Anthropic Claude API, MCP.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ---------- tokens ---------- */
-  :root {
-    --paper: #eef1f6;
-    --paper-dot: rgba(20, 35, 74, 0.06);
-    --tile: #ffffff;
-    --line: #dde3ec;
-    --line-strong: #c3ccdd;
-    --ink: #10131a;
-    --ink-soft: #4a5166;
-    --ink-faint: #7a8298;
-    --accent: #2f52e0;
-    --tint: #e7ebfc;
-    --on-accent: #eef1ff;
-    --hero-a: #0a1240;
-    --hero-b: #1f3bb0;
-    --hero-ink: #eef1ff;
-    --hero-mute: rgba(238, 241, 255, 0.72);
-    --hero-line: rgba(238, 241, 255, 0.13);
-    --hero-edge: rgba(238, 241, 255, 0.32);
-    --tick: #6f8bff;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: #080a11;
-      --paper-dot: rgba(150, 170, 255, 0.055);
-      --tile: #10131d;
-      --line: #1d2434;
-      --line-strong: #2b3449;
-      --ink: #e8eaf3;
-      --ink-soft: #9aa3bf;
-      --ink-faint: #5f6886;
-      --accent: #6f8bff;
-      --tint: #141b30;
-      --on-accent: #060811;
-      --hero-a: #060a26;
-      --hero-b: #16225f;
-      --hero-ink: #eef1ff;
-      --hero-mute: rgba(238, 241, 255, 0.66);
-      --hero-line: rgba(238, 241, 255, 0.10);
-      --hero-edge: rgba(238, 241, 255, 0.28);
-      --tick: #6f8bff;
-    }
-  }
-  :root[data-theme="dark"] {
-    --paper: #080a11; --paper-dot: rgba(150, 170, 255, 0.055);
-    --tile: #10131d; --line: #1d2434; --line-strong: #2b3449;
-    --ink: #e8eaf3; --ink-soft: #9aa3bf; --ink-faint: #5f6886;
-    --accent: #6f8bff; --tint: #141b30; --on-accent: #060811;
-    --hero-a: #060a26; --hero-b: #16225f; --hero-ink: #eef1ff;
-    --hero-mute: rgba(238, 241, 255, 0.66);
-    --hero-line: rgba(238, 241, 255, 0.10);
-    --hero-edge: rgba(238, 241, 255, 0.28);
-    --tick: #6f8bff;
-  }
-  :root[data-theme="light"] {
-    --paper: #eef1f6; --paper-dot: rgba(20, 35, 74, 0.06);
-    --tile: #ffffff; --line: #dde3ec; --line-strong: #c3ccdd;
-    --ink: #10131a; --ink-soft: #4a5166; --ink-faint: #7a8298;
-    --accent: #2f52e0; --tint: #e7ebfc; --on-accent: #eef1ff;
-    --hero-a: #0a1240; --hero-b: #1f3bb0; --hero-ink: #eef1ff;
-    --hero-mute: rgba(238, 241, 255, 0.72);
-    --hero-line: rgba(238, 241, 255, 0.13);
-    --hero-edge: rgba(238, 241, 255, 0.32);
-    --tick: #6f8bff;
+  :root{
+    --bg: #0a0f1a;
+    --panel: #111a2b;
+    --panel-raised: #16223a;
+    --line: #223049;
+    --text: #e7ecf3;
+    --muted: #7c8aa5;
+    --amber: #f2b84b;
+    --teal: #5eead4;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+    --sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    --radius: 3px;
   }
 
-  /* ---------- base ---------- */
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background-color: var(--paper);
-    background-image: radial-gradient(var(--paper-dot) 1px, transparent 1px);
-    background-size: 26px 26px;
-    color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    line-height: 1.55;
-    overflow-x: hidden;
-  }
-  .mono { font-family: ui-monospace, "Cascadia Code", "SF Mono", "JetBrains Mono", Consolas, "Liberation Mono", monospace; }
-  a { color: inherit; }
-  h1, h2, h3 { text-wrap: balance; margin: 0; }
-  p { margin: 0; }
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 22px; }
+  *{ box-sizing: border-box; margin:0; padding:0; }
 
-  a:focus-visible, .tile:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  a.tile:focus-visible { outline-offset: -2px; }
+  html{ scroll-behavior: smooth; }
 
-  /* ---------- masthead ---------- */
-  .masthead {
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    padding: 22px 0 20px;
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-attachment: fixed;
+    background-position: -1px -1px;
   }
-  .wordmark { display: inline-flex; align-items: center; gap: 10px; font-weight: 750; font-size: 14px; letter-spacing: -0.01em; text-decoration: none; }
-  .wordmark .sq { width: 10px; height: 10px; background: var(--accent); flex: none; }
-  .masthead nav { display: flex; gap: 20px; }
-  .masthead nav a {
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 12.5px; color: var(--ink-soft); text-decoration: none;
-  }
-  .masthead nav a:hover { color: var(--accent); }
 
-  /* ---------- hero : the one bold move ---------- */
-  .hero {
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  a{ color: var(--teal); text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+
+  ::selection{ background: var(--amber); color: #0a0f1a; }
+
+  :focus-visible{
+    outline: 2px solid var(--teal);
+    outline-offset: 3px;
+  }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(10,15,26,0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 28px; max-width: 1080px; margin: 0 auto;
+  }
+  .logo{
+    font-family: var(--mono); font-weight: 700; font-size: 15px;
+    color: var(--text); letter-spacing: 0.02em;
+    display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{ width:8px; height:8px; border-radius:50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+  nav.links{ display:flex; gap: 28px; font-family: var(--mono); font-size: 13px; }
+  nav.links a{ color: var(--muted); }
+  nav.links a:hover{ color: var(--teal); }
+  .nav-cta{
+    font-family: var(--mono); font-size: 12px; padding: 8px 14px;
+    border: 1px solid var(--teal); color: var(--teal); border-radius: var(--radius);
+  }
+  .nav-cta:hover{ background: var(--teal); color: #0a0f1a; text-decoration: none; }
+  @media (max-width: 720px){ nav.links{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding: 72px 0 40px;
     position: relative;
-    background: radial-gradient(900px 420px at 82% -12%, var(--hero-line), transparent 62%),
-                linear-gradient(155deg, var(--hero-b), var(--hero-a) 72%);
-    color: var(--hero-ink);
-    padding: clamp(36px, 6vw, 64px) clamp(24px, 5vw, 56px) 0;
+  }
+  .status-line{
+    font-family: var(--mono); font-size: 12px; color: var(--amber);
+    display:inline-flex; align-items:center; gap:10px;
+    border: 1px solid rgba(242,184,75,0.35);
+    background: rgba(242,184,75,0.06);
+    padding: 6px 12px; border-radius: var(--radius);
+    margin-bottom: 28px;
+  }
+  .status-line .blink{
+    width:6px; height:6px; border-radius:50%; background: var(--amber);
+    animation: blink 1.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{ opacity:1;} 50%{ opacity:0.25;} }
+
+  h1.name{
+    font-family: var(--mono); font-weight: 700;
+    font-size: clamp(38px, 6vw, 64px);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  h1.name .last{ color: var(--teal); }
+
+  .role-line{
+    font-size: clamp(16px, 2.2vw, 20px);
+    color: var(--muted);
+    max-width: 640px;
+    margin-bottom: 6px;
+  }
+  .role-line b{ color: var(--text); font-weight: 600; }
+
+  .locline{
+    font-family: var(--mono); font-size: 12.5px; color: var(--muted);
+    margin-bottom: 36px;
+  }
+  .locline span{ color: var(--text); }
+
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom: 56px; }
+  .btn{
+    font-family: var(--mono); font-size: 13px; padding: 12px 20px;
+    border-radius: var(--radius); border: 1px solid var(--line);
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn.primary{ background: var(--teal); color: #0a0f1a; border-color: var(--teal); font-weight:600; }
+  .btn.primary:hover{ background: #7ff2df; text-decoration:none; }
+  .btn.ghost{ color: var(--text); border-color: var(--line); }
+  .btn.ghost:hover{ border-color: var(--teal); color: var(--teal); text-decoration:none; }
+
+  /* ---------- DIAGRAM (signature element) ---------- */
+  .diagram-shell{
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--panel), var(--bg));
+    border-radius: var(--radius);
+    padding: 6px;
     overflow: hidden;
   }
-  .hero::before {
-    content: "";
-    position: absolute; inset: 0;
-    background-image:
-      repeating-linear-gradient(0deg, var(--hero-line) 0 1px, transparent 1px 34px),
-      repeating-linear-gradient(90deg, var(--hero-line) 0 1px, transparent 1px 34px);
-    pointer-events: none;
+  .diagram-bar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 10px 14px; font-family: var(--mono); font-size: 11px; color: var(--muted);
+    border-bottom: 1px solid var(--line);
   }
-  .hero > * { position: relative; }
-  .hero .eyebrow {
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--hero-mute);
-  }
-  .hero h1 {
-    margin-top: 18px;
-    font-size: clamp(46px, 7.5vw, 78px);
-    font-weight: 800;
-    letter-spacing: -0.035em;
-    line-height: 0.98;
-  }
-  .hero .lede {
-    margin-top: 22px;
-    font-size: clamp(15.5px, 1.7vw, 17.5px);
-    max-width: 58ch;
-    color: var(--hero-mute);
-  }
-  .hero .lede strong { color: var(--hero-ink); font-weight: 650; }
-  .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
-  .hero-actions a {
-    display: inline-flex; align-items: center; gap: 9px;
-    padding: 11px 20px;
-    border: 1px solid var(--hero-edge);
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 13px; font-weight: 600;
-    color: var(--hero-ink); text-decoration: none;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-  }
-  .hero-actions a.solid { background: var(--hero-ink); color: var(--hero-a); border-color: var(--hero-ink); }
-  .hero-actions a:hover { background: var(--hero-ink); color: var(--hero-a); border-color: var(--hero-ink); }
-  .hero-actions a.solid:hover { background: transparent; color: var(--hero-ink); border-color: var(--hero-edge); }
+  .diagram-bar .traffic{ display:flex; gap:6px; }
+  .diagram-bar .traffic span{ width:9px; height:9px; border-radius:50%; background: var(--line); }
+  .diagram-bar .trace-left, .diagram-bar .trace-right{ display:flex; align-items:center; gap:10px; }
+  .diagram-bar #trace-status{ color: var(--teal); }
+  .diagram-bar #trace-clock{ font-variant-numeric: tabular-nums; color: var(--muted); }
+  #infra-svg{ display:block; width:100%; height:auto; }
 
-  .hero-status {
-    margin-top: clamp(32px, 5vw, 52px);
-    border-top: 1px solid var(--hero-line);
-    padding: 16px 0 18px;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 12.5px;
+  .node-label{ font-family: var(--mono); font-size: 11px; fill: var(--muted); }
+  .node-label.active{ fill: var(--text); }
+  .node-circle{ fill: var(--panel-raised); stroke: var(--line); stroke-width: 1.5; transition: stroke 0.4s, fill 0.4s; }
+  .node-circle.active{ stroke: var(--teal); fill: rgba(94,234,212,0.08); }
+  .node-circle.amber-active{ stroke: var(--amber); fill: rgba(242,184,75,0.08); }
+  .edge{ stroke: var(--line); stroke-width: 1.4; fill:none; }
+  .edge-flow{
+    stroke: var(--teal); stroke-width: 1.6; fill:none;
+    stroke-dasharray: 6 10;
+    stroke-dashoffset: 0;
+    opacity: 0;
   }
-  .hero-status .op { display: inline-flex; align-items: center; gap: 9px; font-weight: 600; }
-  .hero-status .loc { color: var(--hero-mute); }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--tick); box-shadow: 0 0 0 3px color-mix(in srgb, var(--tick) 24%, transparent); flex: none; }
-  @media (prefers-reduced-motion: no-preference) { .dot { animation: pulse 2.4s ease-in-out infinite; } }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
-  .ticks {
-    height: 12px; margin: 0 calc(-1 * clamp(24px, 5vw, 56px));
-    background: repeating-linear-gradient(90deg, var(--tick) 0 5px, transparent 5px 10px);
-    opacity: 0.85;
+  .edge-flow.on{
+    opacity: 1;
+    animation: dash 1.4s linear infinite;
   }
+  @keyframes dash{ to{ stroke-dashoffset: -32; } }
 
-  /* ---------- metrics strip ---------- */
-  .metrics {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    background: var(--tile); border: 1px solid var(--line); border-top: none;
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{ padding: 64px 0; border-top: 1px solid var(--line); }
+  .eyebrow{
+    font-family: var(--mono); font-size: 12px; color: var(--amber);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px;
+    display:flex; align-items:center; gap:10px;
   }
-  .metric { padding: 22px 24px 20px; }
-  .metric + .metric { border-left: 1px solid var(--line); }
-  .metric .n {
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-variant-numeric: tabular-nums;
-    font-size: clamp(28px, 3.6vw, 38px); font-weight: 700; line-height: 1;
-    color: var(--accent);
-  }
-  .metric .l {
-    display: block; margin-top: 8px;
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--ink-faint);
-  }
+  .eyebrow::before{ content:''; width: 20px; height:1px; background: var(--amber); }
+  h2.h2{ font-family: var(--mono); font-size: clamp(22px,3vw,30px); font-weight:600; margin-bottom: 24px; }
 
-  /* ---------- stack strip ---------- */
-  .stack {
-    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
-    border: 1px solid var(--line); border-top: none; background: var(--tile);
-    padding: 14px 24px;
-  }
-  .stack .l {
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--ink-faint); flex: none;
-  }
-  .tags { display: flex; flex-wrap: wrap; gap: 7px; }
-  .tag {
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 12px; font-weight: 600; padding: 4px 10px;
-    background: var(--tint); color: var(--accent);
-  }
+  .lede{ color: var(--muted); max-width: 700px; font-size: 15.5px; }
 
-  /* ---------- section heads ---------- */
-  .section-head {
-    display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
-    margin: 64px 0 20px; padding-bottom: 14px;
-    border-bottom: 1px solid var(--line-strong);
-  }
-  .section-head h2 { font-size: 21px; font-weight: 750; letter-spacing: -0.015em; display: flex; align-items: center; gap: 12px; }
-  .section-head h2::before { content: ""; width: 9px; height: 9px; background: var(--accent); flex: none; }
-  .section-head .count {
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 12px; color: var(--ink-faint); white-space: nowrap;
-  }
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns: 1.3fr 1fr; gap: 48px; margin-top: 28px; }
+  @media (max-width: 780px){ .about-grid{ grid-template-columns: 1fr; } }
+  .about-grid p{ color: var(--text); font-size: 15.5px; margin-bottom: 16px; }
+  .stat-block{ border-left: 1px solid var(--line); padding-left: 20px; }
+  .stat{ margin-bottom: 22px; }
+  .stat .num{ font-family: var(--mono); font-size: 28px; color: var(--teal); font-weight:700; }
+  .stat .lbl{ font-size: 12.5px; color: var(--muted); }
 
-  /* ---------- bento ---------- */
-  .bento { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: minmax(96px, auto); grid-auto-flow: dense; gap: 16px; }
-  .c2 { grid-column: span 2; }
-  .c4 { grid-column: span 4; }
-  .r2 { grid-row: span 2; }
-  .tile {
-    border-radius: 0;
-    border: 1px solid var(--line);
-    background: var(--tile);
-    padding: 24px;
-    display: flex; flex-direction: column;
-    text-decoration: none; color: inherit;
-    position: relative; overflow: hidden;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  /* ---------- EXPERIENCE (real timeline -> dates as markers, legitimate) ---------- */
+  .timeline{ margin-top: 24px; position: relative; }
+  .tl-item{
+    display:grid; grid-template-columns: 140px 1fr; gap: 24px;
+    padding: 26px 0; border-bottom: 1px solid var(--line);
   }
-  a.tile:hover { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-  .tile.tint { background: var(--tint); border-color: color-mix(in srgb, var(--accent) 32%, var(--line)); }
+  .tl-item:last-child{ border-bottom:none; }
+  .tl-date{ font-family: var(--mono); font-size: 12.5px; color: var(--amber); padding-top:2px; }
+  .tl-role{ font-size: 16.5px; font-weight:600; color: var(--text); }
+  .tl-org{ font-size: 13.5px; color: var(--teal); margin-bottom: 10px; font-family: var(--mono); }
+  .tl-desc{ color: var(--muted); font-size: 14.5px; }
+  .tl-desc li{ margin-bottom: 6px; margin-left: 18px; }
+  @media (max-width: 640px){ .tl-item{ grid-template-columns: 1fr; } }
 
-  /* project tiles */
-  .tile-proj { justify-content: space-between; gap: 14px; }
-  .proj-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
-  .proj-name {
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-weight: 700; font-size: 15px; letter-spacing: -0.01em;
-    transition: color 0.15s ease;
+  /* ---------- PROJECTS ---------- */
+  .proj-grid{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 28px; }
+  @media (max-width: 780px){ .proj-grid{ grid-template-columns: 1fr; } }
+  .proj-card{
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 22px; background: var(--panel);
+    transition: border-color 0.25s, transform 0.25s;
   }
-  a.tile:hover .proj-name { color: var(--accent); }
-  .pill {
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
-    padding: 4px 10px; white-space: nowrap; flex: none;
-  }
-  .pill-live { background: var(--accent); color: var(--on-accent); }
-  .pill-build { background: transparent; color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
-  .proj-desc { font-size: 13.5px; color: var(--ink-soft); flex: 1; max-width: 62ch; }
-  .proj-media {
-    width: 100%; height: auto; max-height: 360px; object-fit: cover; object-position: top;
-    border: 1px solid var(--line); background: var(--paper); display: block;
-  }
-  .proj-foot {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    padding-top: 12px; border-top: 1px solid var(--line);
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    font-size: 12px; color: var(--ink-faint);
-  }
-  .lang { display: inline-flex; align-items: center; gap: 7px; }
-  .lang::before { content: ""; width: 8px; height: 8px; background: var(--accent); }
-  .go { color: var(--accent); opacity: 0; transform: translate(-4px, 4px); transition: opacity 0.15s ease, transform 0.15s ease; }
-  a.tile:hover .go, a.tile:focus-visible .go { opacity: 1; transform: translate(0, 0); }
-  @media (prefers-reduced-motion: reduce) { .go { transform: none; } }
+  .proj-card:hover{ border-color: var(--teal); transform: translateY(-2px); }
+  .proj-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 10px; }
+  .proj-title{ font-family: var(--mono); font-size: 16px; font-weight:600; color: var(--text); }
+  .proj-tag{ font-family: var(--mono); font-size: 10.5px; color: var(--bg); background: var(--teal); padding: 3px 8px; border-radius: 2px; }
+  .proj-tag.live{ background: var(--amber); }
+  .proj-desc{ color: var(--muted); font-size: 14px; margin-bottom: 12px; }
+  .proj-stack{ display:flex; flex-wrap:wrap; gap:6px; }
+  .chip{ font-family: var(--mono); font-size: 10.5px; color: var(--muted); border: 1px solid var(--line); padding: 3px 8px; border-radius: 2px; }
+  .proj-link{ display:inline-block; margin-top:14px; font-family: var(--mono); font-size: 12.5px; }
 
-  /* mini tiles (coursework) */
-  .tile-mini { justify-content: center; gap: 5px; }
-  .tile-mini .name { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-weight: 700; font-size: 13px; transition: color 0.15s ease; }
-  a.tile:hover .name { color: var(--accent); }
-  .tile-mini .desc { font-size: 12.5px; color: var(--ink-soft); }
-  .tile-more {
-    justify-content: center; align-items: center; text-align: center;
-    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-    color: var(--accent); font-weight: 700; font-size: 13px;
-    background: var(--tint);
-    border: 1px dashed color-mix(in srgb, var(--accent) 45%, var(--line));
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
-  }
-  a.tile-more:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); box-shadow: none; }
+  /* ---------- SKILLS ---------- */
+  .skill-groups{ display:grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 28px; }
+  @media (max-width: 780px){ .skill-groups{ grid-template-columns: 1fr; } }
+  .skill-cat{ border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; background: var(--panel); }
+  .skill-cat h3{ font-family: var(--mono); font-size: 12px; color: var(--amber); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+  .skill-cat .chip{ color: var(--text); }
+  .skill-cat .chips{ display:flex; flex-wrap:wrap; gap: 8px; }
 
-  /* oss tiles */
-  .tile-oss { justify-content: center; gap: 7px; }
-  .tile-oss .repo { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 12px; font-weight: 700; color: var(--accent); }
-  .tile-oss .line { font-size: 14.5px; font-weight: 650; letter-spacing: -0.01em; }
-  .tile-oss .desc { font-size: 12.5px; color: var(--ink-soft); }
-  .tile-oss .go { position: absolute; top: 18px; right: 20px; }
-  .tile-oss code { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 0.92em; }
+  /* ---------- CERTS ---------- */
+  .cert-row{ display:grid; grid-template-columns: repeat(3,1fr); gap:18px; margin-top:28px; }
+  @media (max-width: 780px){ .cert-row{ grid-template-columns: 1fr; } }
+  .cert-card{ border:1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; background: var(--panel); }
+  .cert-name{ font-weight:600; font-size: 14.5px; margin-bottom:4px; }
+  .cert-org{ font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .cert-link{ font-family: var(--mono); font-size: 11px; display:inline-block; margin-top:10px; }
 
-  /* ---------- footer ---------- */
-  footer { margin-top: 72px; border-top: 1px solid var(--line-strong); padding: 30px 0 64px; font-size: 13px; color: var(--ink-faint); }
-  footer .prompt { font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 14px; color: var(--ink-soft); }
-  footer .prompt .accent { color: var(--accent); }
-  .foot-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
-  .foot-row a { color: var(--accent); text-decoration: none; font-weight: 600; }
-  .foot-row a:hover { text-decoration: underline; }
-  .colophon { margin-top: 26px; font-family: ui-monospace, "Cascadia Code", Consolas, monospace; font-size: 11.5px; }
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{ padding: 72px 0 48px; border-top: 1px solid var(--line); }
+  .contact-inner{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap: 28px; }
+  .contact-title{ font-family: var(--mono); font-size: clamp(24px,4vw,36px); font-weight:700; max-width: 520px; }
+  .contact-title .teal{ color: var(--teal); }
+  .contact-links{ display:flex; flex-direction:column; gap:10px; align-items:flex-end; }
+  @media (max-width: 640px){ .contact-inner{ flex-direction:column; align-items:flex-start; } .contact-links{ align-items:flex-start; } }
+  .contact-links a{ font-family: var(--mono); font-size: 14px; color: var(--text); }
+  .contact-links a:hover{ color: var(--teal); }
+  .contact-qr{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .contact-qr img{ width:120px; height:120px; border-radius: var(--radius); border:1px solid var(--line); background:#fff; padding:6px; display:block; }
+  .contact-qr p{ font-family: var(--mono); font-size: 11px; color: var(--muted); text-align:center; max-width:130px; }
+  @media (max-width: 640px){ .contact-qr{ align-items:flex-start; } .contact-qr p{ text-align:left; } }
+  .foot-note{ margin-top: 48px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; }
 
-  /* ---------- responsive ---------- */
-  @media (max-width: 760px) {
-    .bento { grid-template-columns: repeat(2, 1fr); }
-    .c4 { grid-column: span 2; }
-    .r2 { grid-row: auto; }
-    .metrics { grid-template-columns: repeat(2, 1fr); }
-    .metric:nth-child(odd) { border-left: none; }
-    .metric:nth-child(n+3) { border-top: 1px solid var(--line); }
+  /* ---------- CUSTOMIZE / EDIT MODE ---------- */
+  #edit-gear{
+    position: fixed; bottom: 22px; right: 22px; z-index: 200;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--panel-raised); border: 1px solid var(--line);
+    color: var(--muted); font-size: 18px;
+    display:flex; align-items:center; justify-content:center;
+    cursor: pointer; box-shadow: 0 4px 18px rgba(0,0,0,0.4);
+    transition: color 0.2s, border-color 0.2s, transform 0.2s;
   }
-  @media (max-width: 440px) {
-    .bento { grid-template-columns: 1fr; }
-    .c2, .c4 { grid-column: span 1; }
-    .stack { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .masthead nav { gap: 14px; }
+  #edit-gear:hover{ color: var(--teal); border-color: var(--teal); transform: rotate(35deg); }
+
+  #edit-toolbar{
+    position: fixed; bottom: 22px; right: 22px; z-index: 200;
+    display:none; align-items:center; gap: 8px;
+    background: var(--panel-raised); border: 1px solid var(--teal);
+    border-radius: var(--radius); padding: 10px 12px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+    font-family: var(--mono); font-size: 12px;
+    flex-wrap: wrap; max-width: min(94vw, 560px);
   }
+  #edit-toolbar.on{ display:flex; }
+  #edit-toolbar .tag{ color: var(--teal); margin-right:4px; }
+  #edit-toolbar button, #edit-toolbar label.filebtn{
+    font-family: var(--mono); font-size: 11.5px; color: var(--text);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 2px;
+    padding: 7px 10px; cursor: pointer;
+  }
+  #edit-toolbar button:hover, #edit-toolbar label.filebtn:hover{ border-color: var(--teal); color: var(--teal); }
+  #edit-toolbar button.danger:hover{ border-color: #f27676; color: #f27676; }
+  #edit-toolbar input[type=file]{ display:none; }
+
+  body.edit-mode #site-content{
+    outline: 1px dashed rgba(94,234,212,0.35);
+    outline-offset: 6px;
+    cursor: text;
+  }
+  body.edit-mode #site-content:focus{ outline-color: var(--teal); }
+
+  .add-btn{
+    display:none; font-family: var(--mono); font-size: 11.5px; color: var(--teal);
+    border: 1px dashed var(--teal); border-radius: var(--radius);
+    padding: 10px 14px; background: transparent; cursor: pointer; width: 100%;
+    margin-top: 14px;
+  }
+  body.edit-mode .add-btn{ display:inline-block; }
+  .add-btn:hover{ background: rgba(94,234,212,0.08); }
+
+  .del-btn{
+    display:none; position:absolute; top:8px; right:8px;
+    width:22px; height:22px; border-radius:50%;
+    background: #1c2740; border: 1px solid var(--line); color: var(--muted);
+    font-size: 12px; line-height:1; align-items:center; justify-content:center;
+    cursor:pointer; z-index: 5;
+  }
+  body.edit-mode .proj-card, body.edit-mode .cert-card{ position:relative; }
+  body.edit-mode .proj-card .del-btn, body.edit-mode .cert-card .del-btn{ display:flex; }
+  .del-btn:hover{ border-color:#f27676; color:#f27676; }
+
+  body.edit-mode .chip{ position:relative; padding-right: 18px; }
+  body.edit-mode .chip .chip-del{
+    display:inline; position:absolute; right:3px; top:50%; transform:translateY(-50%);
+    font-size:10px; color: var(--muted); cursor:pointer;
+  }
+  .chip .chip-del:hover{ color: #f27676; }
+
+  body.edit-mode .tl-item{ position:relative; }
+  body.edit-mode .tl-item .del-btn{ display:flex; top: 26px; }
+
+  #theme-panel{
+    position: fixed; bottom: 78px; right: 22px; z-index: 199;
+    display:none; flex-direction:column; gap:12px;
+    background: var(--panel-raised); border: 1px solid var(--line);
+    border-radius: var(--radius); padding: 18px; width: 240px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+    font-family: var(--mono); font-size: 12px;
+  }
+  #theme-panel.on{ display:flex; }
+  #theme-panel .row{ display:flex; align-items:center; justify-content:space-between; }
+  #theme-panel input[type=color]{
+    width: 34px; height: 24px; border:none; background:none; padding:0; cursor:pointer;
+  }
+  #theme-panel select{
+    font-family: var(--mono); font-size: 11px; background: var(--panel); color: var(--text);
+    border: 1px solid var(--line); border-radius: 2px; padding: 4px 6px;
+  }
+  #edit-lock-note{ font-size: 10.5px; color: var(--muted); line-height:1.4; }
 </style>
+</head>
+<body>
 
-<div class="wrap">
-
-  <div class="masthead">
-    <a class="wordmark" href="https://github.com/Hardikrepo"><span class="sq" aria-hidden="true"></span>hardik maru</a>
-    <nav>
-      <a href="https://github.com/Hardikrepo">github ↗</a>
-      <a href="https://www.linkedin.com/in/hardik-maru-1a220462/">linkedin ↗</a>
+<header class="nav">
+  <div class="nav-inner">
+    <div class="logo"><span class="dot"></span>HARDIK MARU</div>
+    <nav class="links">
+      <a href="#about">about</a>
+      <a href="#experience">experience</a>
+      <a href="#projects">projects</a>
+      <a href="#oss">open source</a>
+      <a href="#skills">skills</a>
+      <a href="#certs">certs</a>
+      <a href="#hobbies">hobbies</a>
     </nav>
+    <a class="nav-cta" href="#contact">contact →</a>
   </div>
+</header>
 
-  <header class="hero">
-    <p class="eyebrow">Hardikrepo · DevOps / Platform · AWS Specialist</p>
-    <h1>Infrastructure that ships itself.</h1>
-    <p class="lede"><strong>Hardik Maru</strong> — DevOps engineer building and automating cloud infrastructure across AWS, GCP, and Azure. Terraform, Kubernetes, and CI/CD as the base layer; lately, AI-assisted operations and automated incident analysis on top.</p>
-    <div class="hero-actions">
-      <a class="solid" href="https://www.linkedin.com/in/hardik-maru-1a220462/">Connect on LinkedIn ↗</a>
-      <a href="https://github.com/Hardikrepo">Browse the repos ↗</a>
+<div id="site-content">
+<main class="wrap">
+
+  <!-- HERO -->
+  <section class="hero" style="border-top:none; padding-top:56px;">
+    <div class="status-line"><span class="blink"></span>OPEN TO SENIOR CLOUD ARCHITECT / STAFF DEVOPS-SRE / MLOPS / GENAI INFRA ROLES</div>
+
+    <h1 class="name">Hardik <span class="last">Maru</span></h1>
+    <p class="role-line"><b>Cloud Architect</b> · DevOps/SRE Engineer · <b>GenAI</b> Infrastructure Specialist</p>
+    <p class="locline">India <span>·</span> remote-first <span>·</span> <span>9+ years</span> hardware → software → cloud → GenAI</p>
+
+    <div class="hero-ctas">
+      <a class="btn primary" href="#contact">Get in touch</a>
+      <a class="btn ghost" href="#experience">See experience ↓</a>
+      <a class="btn ghost" href="https://easyblueprintgen.com" target="_blank" rel="noopener">Live product: BlueprintAI ↗</a>
     </div>
-    <div class="hero-status">
-      <span class="op"><span class="dot" aria-hidden="true"></span> All systems operational</span>
-      <span class="loc">Open to infrastructure &amp; AI-tooling work · India &amp; remote, worldwide</span>
+
+    <div class="diagram-shell" contenteditable="false">
+      <div class="diagram-bar">
+        <span class="trace-left">infra_pipeline.tf — live trace <span id="trace-status">initializing…</span></span>
+        <span class="trace-right"><span id="trace-clock">00:00</span><span class="traffic"><span></span><span></span><span></span></span></span>
+      </div>
+      <svg id="infra-svg" viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated diagram showing a request flowing from Terraform through AWS EKS and Bedrock to the Claude API and back through an MCP agent">
+        <!-- edges (drawn first, under nodes) -->
+        <path class="edge" d="M110,70 L260,70" />
+        <path class="edge" d="M110,190 L260,190" />
+        <path class="edge" d="M340,70 L460,130" />
+        <path class="edge" d="M340,190 L460,130" />
+        <path class="edge" d="M540,130 L660,70" />
+        <path class="edge" d="M540,130 L660,190" />
+        <path class="edge" d="M740,70 L800,130" />
+        <path class="edge" d="M740,190 L800,130" />
+
+        <!-- animated flow overlays -->
+        <path id="f1" class="edge-flow" d="M110,70 L260,70" />
+        <path id="f2" class="edge-flow" d="M110,190 L260,190" />
+        <path id="f3" class="edge-flow" d="M340,70 L460,130" />
+        <path id="f4" class="edge-flow" d="M340,190 L460,130" />
+        <path id="f5" class="edge-flow" d="M540,130 L660,70" />
+        <path id="f6" class="edge-flow" d="M540,130 L660,190" />
+        <path id="f7" class="edge-flow" d="M740,70 L800,130" />
+        <path id="f8" class="edge-flow" d="M740,190 L800,130" />
+
+        <!-- nodes -->
+        <g id="n1"><circle class="node-circle" cx="70" cy="70" r="34"/><text class="node-label" x="70" y="74" text-anchor="middle">EC2</text></g>
+        <g id="n2"><circle class="node-circle" cx="70" cy="190" r="34"/><text class="node-label" x="70" y="194" text-anchor="middle">EKS</text></g>
+
+        <g id="n3"><circle class="node-circle" cx="300" cy="70" r="34"/><text class="node-label" x="300" y="66" text-anchor="middle">Terra-</text><text class="node-label" x="300" y="80" text-anchor="middle">form</text></g>
+        <g id="n4"><circle class="node-circle" cx="300" cy="190" r="34"/><text class="node-label" x="300" y="194" text-anchor="middle">GitOps</text></g>
+
+        <g id="n5"><circle class="node-circle" cx="500" cy="130" r="38"/><text class="node-label" x="500" y="126" text-anchor="middle">MCP</text><text class="node-label" x="500" y="140" text-anchor="middle">agent</text></g>
+
+        <g id="n6"><circle class="node-circle" cx="700" cy="70" r="34"/><text class="node-label" x="700" y="66" text-anchor="middle">Bed-</text><text class="node-label" x="700" y="80" text-anchor="middle">rock</text></g>
+        <g id="n7"><circle class="node-circle" cx="700" cy="190" r="34"/><text class="node-label" x="700" y="186" text-anchor="middle">Claude</text><text class="node-label" x="700" y="200" text-anchor="middle">API</text></g>
+
+        <g id="n8"><circle class="node-circle" cx="850" cy="130" r="30"/><text class="node-label" x="850" y="126" text-anchor="middle">infra:</text><text class="node-label" x="850" y="140" text-anchor="middle">✓ live</text></g>
+      </svg>
     </div>
-    <div class="ticks" aria-hidden="true"></div>
-  </header>
+  </section>
 
-  <div class="metrics">
-    <div class="metric"><span class="n">27</span><span class="l">public repositories</span></div>
-    <div class="metric"><span class="n">3</span><span class="l">cloud platforms</span></div>
-    <div class="metric"><span class="n">4</span><span class="l">deployed infra projects</span></div>
-    <div class="metric"><span class="n">6</span><span class="l">OSS repos contributed to</span></div>
-  </div>
-
-  <div class="stack">
-    <span class="l">Core stack</span>
-    <div class="tags">
-      <span class="tag">AWS</span><span class="tag">Terraform</span><span class="tag">Kubernetes</span><span class="tag">Docker</span><span class="tag">GitHub Actions</span><span class="tag">OIDC</span>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="eyebrow">Summary</div>
+    <h2 class="h2">Cloud infrastructure, built to be talked to in plain language.</h2>
+    <div class="about-grid">
+      <div>
+        <p>Nine years across hardware support, enterprise software engineering, and cloud consulting have converged into one focus: designing AWS infrastructure that's highly available, cost-aware, and increasingly operable through natural language rather than console clicks.</p>
+        <p>Day to day that means Terraform modules with remote state and DynamoDB locking, GitOps pipelines authenticated with keyless OIDC, and EKS/ECS workloads tuned for reliability. Layered on top: Anthropic Claude and OpenAI-based agents — including a Model Context Protocol server that exposes AWS services as LLM-callable tools — that turn "provision a staging VPC" into something an agent can actually do.</p>
+        <p>Currently building and operating <a href="https://easyblueprintgen.com" target="_blank" rel="noopener">BlueprintAI</a> through Suhrad Enterprise, and open to Senior Cloud Architect, Staff DevOps/SRE, MLOps, and GenAI Infrastructure roles — remote or across Ahmedabad, Pune, Bangalore, Hyderabad, and GCC mandates.</p>
+      </div>
+      <div class="stat-block">
+        <div class="stat"><div class="num">9+</div><div class="lbl">years, hardware to GenAI infra</div></div>
+        <div class="stat"><div class="num">3</div><div class="lbl">clouds worked across — AWS, GCP, Azure</div></div>
+        <div class="stat"><div class="num">2</div><div class="lbl">AWS certifications + CCNA</div></div>
+        <div class="stat"><div class="num">1</div><div class="lbl">live AI SaaS product shipped solo</div></div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="section-head">
-    <h2>Deployed &amp; active</h2>
-    <span class="count">5 featured builds</span>
-  </div>
-  <div class="bento">
-    <a class="tile tile-proj tint c4" href="https://github.com/Hardikrepo/orbinexa-commerce-platform">
-      <div class="proj-top"><span class="proj-name">orbinexa-commerce-platform</span><span class="pill pill-build">local demo</span></div>
-      <img class="proj-media" src="assets/orbinexa-platform-demo.gif" alt="Privacy-redacted Orbinexa storefront, administration panel, and developer portal demonstration">
-      <p class="proj-desc">Enterprise e-commerce and DevSecOps reference platform with a modern storefront, administration console, developer portal, TypeScript API, PostgreSQL, Redis, Docker Compose, Terraform, Amazon EKS, Helm, GitHub Actions, GitOps, security controls, observability, architecture diagrams, and beginner deployment guides.</p>
-      <div class="proj-foot"><span class="lang">TypeScript / HCL</span><span>published Jul 16 <span class="go">→</span></span></div>
-    </a>
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="eyebrow">Experience</div>
+    <h2 class="h2">Where the infrastructure was built</h2>
+    <div class="timeline">
 
-    <a class="tile tile-proj tint c2 r2" href="https://github.com/Hardikrepo/gitops-aws-terraform-oidc">
-      <div class="proj-top"><span class="proj-name">gitops-aws-terraform-oidc</span><span class="pill pill-live">deployed</span></div>
-      <p class="proj-desc">Multi-env (dev/staging/prod) Terraform, GitHub Actions assuming AWS IAM roles via OIDC — no stored access keys. Bootstrap applied to a live AWS account; includes automated stuck-state detection and a plan-reviewer that flags risky changes on every PR.</p>
-      <div class="proj-foot"><span class="lang">HCL</span><span>updated Jul 14 <span class="go">↗</span></span></div>
-    </a>
+      <div class="tl-item">
+        <div class="tl-date">2016 — Present</div>
+        <div>
+          <div class="tl-role">BDE &amp; Cloud Specialist</div>
+          <div class="tl-org">Suhrad Enterprise · Rajkot, India (remote-first)</div>
+          <ul class="tl-desc">
+            <li>Founded and run a cloud consulting and AI automation practice covering AWS architecture, DevOps transformation, and GenAI product development.</li>
+            <li>Delivered multi-environment AWS architectures — EC2, EKS, ECS Fargate, RDS, ALB, S3, DynamoDB, CloudWatch, Bedrock — for enterprise clients.</li>
+            <li>Built BlueprintAI, a live Claude API-powered SaaS product for automated blueprint generation.</li>
+            <li>Developed an MCP Infrastructure Automation Agent exposing AWS services as LLM-callable tools.</li>
+            <li>Implemented GitOps pipelines with GitHub Actions and keyless OIDC authentication.</li>
+            <li>Integrated Bedrock-backed agents for automated Terraform plan review and stale state-lock diagnosis.</li>
+          </ul>
+        </div>
+      </div>
 
-    <a class="tile tile-proj c2" href="https://github.com/Hardikrepo/aws-autoscaling-web-tier">
-      <div class="proj-top"><span class="proj-name">aws-autoscaling-web-tier</span><span class="pill pill-live">deployed</span></div>
-      <p class="proj-desc">Production-shaped ALB + Auto Scaling web tier: multi-environment, private subnets, WAF, IMDSv2, CI/CD and automated tests.</p>
-      <div class="proj-foot"><span class="lang">HCL</span><span>updated Jul 14 <span class="go">↗</span></span></div>
-    </a>
+      <div class="tl-item">
+        <div class="tl-date">2016 — Jul 2018</div>
+        <div>
+          <div class="tl-role">Cloud / DevOps Consultant</div>
+          <div class="tl-org">Great Lakes Water Authority (GLWA) · Detroit, MI, USA (remote)</div>
+          <ul class="tl-desc">
+            <li>Delivered cloud infrastructure consulting and DevOps solutions for a major municipal utility authority serving greater Detroit.</li>
+            <li>Designed AWS-based infrastructure for enterprise workloads, improving reliability and cutting deployment lead time.</li>
+            <li>Established CI/CD pipelines and automated deployment workflows, reducing manual release effort.</li>
+            <li>Produced architecture documentation and runbooks adopted as operational standards by the client.</li>
+          </ul>
+        </div>
+      </div>
 
-    <a class="tile tile-proj c2" href="https://github.com/Hardikrepo/ai-aws-log-analyzer">
-      <div class="proj-top"><span class="proj-name">ai-aws-log-analyzer</span><span class="pill pill-build">active build</span></div>
-      <p class="proj-desc">CLI that pulls logs from AWS, GCP, and Azure and hands them to an LLM for anomaly detection, security triage, cost insight, and free-form chat.</p>
-      <div class="proj-foot"><span class="lang">Python</span><span>updated Jul 9 <span class="go">↗</span></span></div>
-    </a>
+      <div class="tl-item">
+        <div class="tl-date">2014 — 2016</div>
+        <div>
+          <div class="tl-role">Software Engineer</div>
+          <div class="tl-org">LTIET · India</div>
+          <ul class="tl-desc">
+            <li>Developed enterprise Java applications and RESTful backend services for internal business processes.</li>
+            <li>Designed relational database schemas and optimised SQL queries for reporting pipelines.</li>
+          </ul>
+        </div>
+      </div>
 
-    <a class="tile tile-proj c4" href="https://github.com/Hardikrepo/ci-cd">
-      <div class="proj-top"><span class="proj-name">ci-cd</span><span class="pill pill-live">live</span></div>
-      <p class="proj-desc">Static site deployed to AWS S3 + CloudFront through GitHub Actions, authenticated with OIDC-based IAM instead of long-lived credentials.</p>
-      <div class="proj-foot"><span class="lang">HTML</span><span>updated Jul 7 <span class="go">↗</span></span></div>
-    </a>
-  </div>
+      <div class="tl-item">
+        <div class="tl-date">2012 — 2014</div>
+        <div>
+          <div class="tl-role">Software Engineer</div>
+          <div class="tl-org">Micro Mind Tech · India</div>
+          <ul class="tl-desc">
+            <li>Built web application features and system integrations for SME clients.</li>
+            <li>Developed backend modules in Java, contributing to frontend implementation end-to-end.</li>
+          </ul>
+        </div>
+      </div>
 
-  <div class="section-head">
-    <h2>Workshop &amp; coursework</h2>
-    <span class="count">smaller, scenario-based builds</span>
-  </div>
-  <div class="bento">
-    <a class="tile tile-mini c2" href="https://github.com/Hardikrepo/Management-Projects-samples">
-      <span class="name">Management-Projects-samples</span>
-      <span class="desc">Scenario-based IT &amp; management case studies, incl. a product-development and org-change project.</span>
-    </a>
-    <a class="tile tile-mini" href="https://github.com/Hardikrepo/AWS-Latest-DevOps-Demo">
-      <span class="name">AWS-Latest-DevOps-Demo</span>
-      <span class="desc">Notebook walkthrough of current AWS DevOps services.</span>
-    </a>
-    <a class="tile tile-mini" href="https://github.com/Hardikrepo/FINANCIAL-ANALYSIS">
-      <span class="name">FINANCIAL-ANALYSIS</span>
-      <span class="desc">Accounts &amp; finance analysis project.</span>
-    </a>
-    <a class="tile tile-mini" href="https://github.com/Hardikrepo/Database-sample-Project">
-      <span class="name">Database-sample-Project</span>
-      <span class="desc">Designing and organizing structured data.</span>
-    </a>
-    <a class="tile tile-mini" href="https://github.com/Hardikrepo/AWS-Service-Demo">
-      <span class="name">AWS-Service-Demo</span>
-      <span class="desc">Reports surveying core AWS services.</span>
-    </a>
-    <a class="tile tile-more c2" href="https://github.com/Hardikrepo?tab=repositories">+21 more repositories on GitHub ↗</a>
-  </div>
+      <div class="tl-item">
+        <div class="tl-date">2010 — 2012</div>
+        <div>
+          <div class="tl-role">IT Hardware &amp; Network Engineer</div>
+          <div class="tl-org">Avani Computers · India</div>
+          <ul class="tl-desc">
+            <li>Installed, configured, and maintained hardware, operating systems, and LAN/WAN infrastructure.</li>
+            <li>Laid the networking foundation later formalised through CCNA certification.</li>
+          </ul>
+        </div>
+      </div>
 
-  <div class="section-head">
-    <h2>Upstream contributions</h2>
-    <span class="count">PRs into other people's repos</span>
-  </div>
-  <div class="bento">
-    <a class="tile tile-oss c2" href="https://github.com/apple/swift-cassandra-client/pulls?q=is%3Apr+author%3AHardikrepo">
-      <span class="repo">apple / swift-cassandra-client</span>
-      <span class="line">Stacked PRs: Decodable query support</span>
-      <span class="desc">Explicit <code>withModelType:</code> overloads, paginated queries, richer error context, deployment-target bump.</span>
-      <span class="go">↗</span>
-    </a>
-    <a class="tile tile-oss c2" href="https://github.com/NVIDIA/cloud-native-stack/pulls?q=is%3Apr+author%3AHardikrepo">
-      <span class="repo">NVIDIA / cloud-native-stack</span>
-      <span class="line">GB200 / Ubuntu runtime fixes</span>
-      <span class="desc">Idempotent Helm installs and Kubernetes 1.35 support.</span>
-      <span class="go">↗</span>
-    </a>
-    <a class="tile tile-oss c2" href="https://github.com/aws/aws-cli/pull/10456">
-      <span class="repo">aws / aws-cli</span>
-      <span class="line">UTF-8 fix for MCP config files</span>
-      <span class="desc">Plus <code>--redirect-port</code> support for SSO login.</span>
-      <span class="go">↗</span>
-    </a>
-    <a class="tile tile-oss c2" href="https://github.com/nasa/osal/pull/1559">
-      <span class="repo">nasa / osal</span>
-      <span class="line">Fixed a stack-buffer-overflow</span>
-      <span class="desc">Also an incorrect <code>statvfs</code> block size and a path-traversal issue.</span>
-      <span class="go">↗</span>
-    </a>
-    <a class="tile tile-oss c2" href="https://github.com/apple/pir-service-example/pull/116">
-      <span class="repo">apple / pir-service-example</span>
-      <span class="line">Error API adoption</span>
-      <span class="desc">Client-facing server errors, plus a troubleshooting doc for a context-refresh workaround.</span>
-      <span class="go">↗</span>
-    </a>
-    <a class="tile tile-oss c2" href="https://github.com/aws/serverless-application-model/pull/3948">
-      <span class="repo">aws / serverless-application-model</span>
-      <span class="line">Fixes for #3911 and #3939</span>
-      <span class="desc">Bug fixes merged upstream into SAM.</span>
-      <span class="go">↗</span>
-    </a>
-  </div>
-
-  <footer>
-    <p class="prompt">hardik@devops<span class="accent">:~$</span> contact --linkedin</p>
-    <div class="foot-row">
-      <a href="https://www.linkedin.com/in/hardik-maru-1a220462/">linkedin.com/in/hardik-maru-1a220462</a>
-      <span class="mono">github.com/Hardikrepo</span>
     </div>
-    <p class="colophon">© 2026 Hardik Maru · single HTML file, system fonts, no frameworks, no trackers</p>
-  </footer>
+  </section>
 
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="eyebrow">Key Projects</div>
+    <h2 class="h2">Infrastructure that runs, and agents that operate it</h2>
+    <div class="proj-grid">
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">BlueprintAI</span><span class="proj-tag live">live</span></div>
+        <p class="proj-desc">A production SaaS product that generates structured blueprints using the Anthropic Claude API, deployed on AWS with secrets managed via Secrets Manager and a React/TypeScript frontend.</p>
+        <div class="proj-stack"><span class="chip">Claude API</span><span class="chip">AWS</span><span class="chip">React + TS</span><span class="chip">Secrets Manager</span></div>
+        <a class="proj-link" href="https://easyblueprintgen.com" target="_blank" rel="noopener">easyblueprintgen.com ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">MCP Infrastructure Automation Agent</span></div>
+        <p class="proj-desc">Exposes core AWS services — EC2, S3, ECS, CloudWatch — as LLM-callable tools, enabling natural-language provisioning, querying, and remediation without console access.</p>
+        <div class="proj-stack"><span class="chip">MCP</span><span class="chip">Claude API</span><span class="chip">OpenAI API</span><span class="chip">AWS</span></div>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">AI Multi-Cloud Log Analyzer</span><span class="proj-tag">active build</span></div>
+        <p class="proj-desc">A CLI that pulls logs from AWS, GCP, and Azure, then hands them to an LLM for anomaly detection, security triage, cost insight, and free-form chat.</p>
+        <div class="proj-stack"><span class="chip">AWS</span><span class="chip">GCP</span><span class="chip">Azure</span><span class="chip">OpenAI</span><span class="chip">Claude</span></div>
+        <a class="proj-link" href="https://github.com/Hardikrepo/ai-aws-log-analyzer" target="_blank" rel="noopener">github.com/Hardikrepo/ai-aws-log-analyzer ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">GitOps for AWS with GitHub OIDC</span><span class="proj-tag live">deployed</span></div>
+        <p class="proj-desc">Multi-env (dev/staging/prod) Terraform, with GitHub Actions assuming AWS IAM roles via OIDC — no stored access keys. Bootstrap applied to a live account, with automated stuck-state detection and a PR plan-reviewer that flags risky changes.</p>
+        <div class="proj-stack"><span class="chip">Terraform</span><span class="chip">GitHub Actions</span><span class="chip">OIDC</span><span class="chip">Bedrock</span></div>
+        <a class="proj-link" href="https://github.com/Hardikrepo/gitops-aws-terraform-oidc" target="_blank" rel="noopener">github.com/Hardikrepo/gitops-aws-terraform-oidc ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">Orbinexa Commerce Platform</span><span class="proj-tag">local demo</span></div>
+        <p class="proj-desc">Enterprise e-commerce and DevSecOps reference platform: storefront, admin console, developer portal, TypeScript API, PostgreSQL, Redis, Docker Compose, Terraform, Amazon EKS, Helm, GitOps, and observability.</p>
+        <div class="proj-stack"><span class="chip">Kubernetes</span><span class="chip">EKS</span><span class="chip">Docker</span><span class="chip">Terraform</span></div>
+        <a class="proj-link" href="https://github.com/Hardikrepo/orbinexa-commerce-platform" target="_blank" rel="noopener">github.com/Hardikrepo/orbinexa-commerce-platform ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">AWS Auto-Scaling Web Tier</span><span class="proj-tag live">deployed</span></div>
+        <p class="proj-desc">Production-shaped ALB + Auto Scaling web tier: multi-environment, private subnets, WAF, IMDSv2, with CI/CD and automated tests.</p>
+        <div class="proj-stack"><span class="chip">Terraform</span><span class="chip">ALB</span><span class="chip">ASG</span><span class="chip">WAF</span></div>
+        <a class="proj-link" href="https://github.com/Hardikrepo/aws-autoscaling-web-tier" target="_blank" rel="noopener">github.com/Hardikrepo/aws-autoscaling-web-tier ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">ci-cd</span><span class="proj-tag live">live</span></div>
+        <p class="proj-desc">Static site deployed to AWS S3 + CloudFront through GitHub Actions, authenticated with OIDC-based IAM instead of long-lived credentials.</p>
+        <div class="proj-stack"><span class="chip">S3</span><span class="chip">CloudFront</span><span class="chip">GitHub Actions</span><span class="chip">OIDC</span></div>
+        <a class="proj-link" href="https://github.com/Hardikrepo/ci-cd" target="_blank" rel="noopener">github.com/Hardikrepo/ci-cd ↗</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- OPEN SOURCE -->
+  <section id="oss">
+    <div class="eyebrow">Open Source</div>
+    <h2 class="h2">Upstream contributions</h2>
+    <p class="lede">PRs merged into other maintainers' repos — 27 public repositories overall, contributions across 6 OSS projects.</p>
+    <div class="proj-grid" style="margin-top:24px;">
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">apple/swift-cassandra-client</span></div>
+        <p class="proj-desc">Stacked PRs adding Decodable query support: explicit <code>withModelType:</code> overloads, paginated queries, richer error context, and a deployment-target bump.</p>
+        <a class="proj-link" href="https://github.com/apple/swift-cassandra-client/pulls?q=is%3Apr+author%3AHardikrepo" target="_blank" rel="noopener">view PRs ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">NVIDIA/cloud-native-stack</span></div>
+        <p class="proj-desc">GB200 / Ubuntu runtime fixes: idempotent Helm installs and Kubernetes 1.35 support.</p>
+        <a class="proj-link" href="https://github.com/NVIDIA/cloud-native-stack/pulls?q=is%3Apr+author%3AHardikrepo" target="_blank" rel="noopener">view PRs ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">aws/aws-cli</span></div>
+        <p class="proj-desc">UTF-8 fix for MCP config files, plus <code>--redirect-port</code> support for SSO login.</p>
+        <a class="proj-link" href="https://github.com/aws/aws-cli/pull/10456" target="_blank" rel="noopener">view PR ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">nasa/osal</span></div>
+        <p class="proj-desc">Fixed a stack-buffer-overflow, an incorrect <code>statvfs</code> block size, and a path-traversal issue.</p>
+        <a class="proj-link" href="https://github.com/nasa/osal/pull/1559" target="_blank" rel="noopener">view PR ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">apple/pir-service-example</span></div>
+        <p class="proj-desc">Error API adoption for client-facing server errors, plus a troubleshooting doc for a context-refresh workaround.</p>
+        <a class="proj-link" href="https://github.com/apple/pir-service-example/pull/116" target="_blank" rel="noopener">view PR ↗</a>
+      </div>
+
+      <div class="proj-card">
+        <div class="proj-head"><span class="proj-title">aws/serverless-application-model</span></div>
+        <p class="proj-desc">Bug fixes for #3911 and #3939, merged upstream into SAM.</p>
+        <a class="proj-link" href="https://github.com/aws/serverless-application-model/pull/3948" target="_blank" rel="noopener">view PR ↗</a>
+      </div>
+
+    </div>
+    <p style="margin-top:20px;"><a href="https://github.com/Hardikrepo?tab=repositories" target="_blank" rel="noopener" class="proj-link">browse all 27 repositories on GitHub ↗</a></p>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="eyebrow">Technical Skills</div>
+    <h2 class="h2">The stack, by category</h2>
+    <div class="skill-groups">
+
+      <div class="skill-cat">
+        <h3>Cloud Platforms</h3>
+        <div class="chips">
+          <span class="chip">EC2</span><span class="chip">EKS</span><span class="chip">ECS Fargate</span><span class="chip">ALB / ASG</span><span class="chip">RDS</span><span class="chip">S3</span><span class="chip">DynamoDB</span><span class="chip">IAM</span><span class="chip">CloudWatch</span><span class="chip">Bedrock</span><span class="chip">Secrets Manager</span><span class="chip">SSM</span><span class="chip">GCP</span><span class="chip">Azure</span>
+        </div>
+      </div>
+
+      <div class="skill-cat">
+        <h3>IaC &amp; GitOps</h3>
+        <div class="chips">
+          <span class="chip">Terraform</span><span class="chip">HCL</span><span class="chip">Remote state</span><span class="chip">DynamoDB locking</span><span class="chip">GitHub Actions</span><span class="chip">OIDC keyless auth</span><span class="chip">Environment promotion gates</span>
+        </div>
+      </div>
+
+      <div class="skill-cat">
+        <h3>AI / GenAI</h3>
+        <div class="chips">
+          <span class="chip">Anthropic Claude API</span><span class="chip">OpenAI API</span><span class="chip">Amazon Bedrock</span><span class="chip">MCP</span><span class="chip">AI agent development</span><span class="chip">LLM log analysis</span>
+        </div>
+      </div>
+
+      <div class="skill-cat">
+        <h3>Containers &amp; Orchestration</h3>
+        <div class="chips">
+          <span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Amazon EKS</span>
+        </div>
+      </div>
+
+      <div class="skill-cat">
+        <h3>Programming &amp; Backend</h3>
+        <div class="chips">
+          <span class="chip">Python</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">JPA</span><span class="chip">REST API design</span><span class="chip">React</span><span class="chip">Flyway</span>
+        </div>
+      </div>
+
+      <div class="skill-cat">
+        <h3>Security &amp; Networking</h3>
+        <div class="chips">
+          <span class="chip">OIDC short-lived creds</span><span class="chip">Least-privilege IAM</span><span class="chip">JWT + BCrypt</span><span class="chip">VPC design</span><span class="chip">Security groups</span><span class="chip">CCNA-level networking</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CERTS -->
+  <section id="certs">
+    <div class="eyebrow">Certifications &amp; Education</div>
+    <h2 class="h2">Credentials</h2>
+    <div class="cert-row">
+      <div class="cert-card">
+        <div class="cert-name">AWS Certified Solutions Architect – Associate</div>
+        <div class="cert-org">Amazon Web Services</div>
+        <a class="cert-link" href="https://www.credly.com/badges/fe5fc196-0e4a-4ef1-bda0-a3cb7917d630" target="_blank" rel="noopener">view badge ↗</a>
+      </div>
+      <div class="cert-card">
+        <div class="cert-name">AWS Certified AI Practitioner</div>
+        <div class="cert-org">Amazon Web Services · SageMaker</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-name">CCNA</div>
+        <div class="cert-org">Cisco Systems</div>
+      </div>
+    </div>
+    <div class="cert-row" style="margin-top:20px;">
+      <div class="cert-card" style="grid-column: span 3;">
+        <div class="cert-name">MSc, Information Security — DeVry University, USA (3.58 / 4.0)</div>
+        <div class="cert-org">Network security · cryptography · risk &amp; project management · information assurance · enterprise security architecture</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOBBIES -->
+  <section id="hobbies">
+    <div class="eyebrow">Beyond the Cloud</div>
+    <h2 class="h2">Hobbies &amp; Interests</h2>
+    <div class="skill-groups" style="grid-template-columns: 1fr;">
+      <div class="skill-cat">
+        <h3>Construction Consulting</h3>
+        <p style="color:var(--text); font-size:14.5px;">12+ years consulting on construction projects for small and large NGOs, with a personal interest in acquiring property and long-term asset appreciation.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="contact-inner">
+      <div class="contact-title">Building infrastructure that responds to <span class="teal">plain-language intent.</span> Let's talk.</div>
+      <div class="contact-links">
+        <div class="contact-qr">
+          <img src="assets/zoom-meeting-qr.jpg" alt="QR code to add Hardik Maru as a contact and schedule a Zoom meeting" width="120" height="120" loading="lazy">
+          <p>Scan to schedule a Zoom meeting</p>
+          <a href="https://us05web.zoom.us/chat/invite/0cdG4baLJYLMqJJy4kOe0" target="_blank" rel="noopener">Zoom invite ↗</a>
+        </div>
+        <a href="https://linkedin.com/in/hardik-maru-1a220462" target="_blank" rel="noopener">linkedin.com/in/hardik-maru-1a220462 ↗</a>
+        <a href="https://github.com/Hardikrepo" target="_blank" rel="noopener">github.com/Hardikrepo ↗</a>
+        <a href="https://hardikrepo.github.io" target="_blank" rel="noopener">hardikrepo.github.io ↗</a>
+      </div>
+    </div>
+    <div class="foot-note">© 2026 Hardik Maru · India</div>
+  </div>
+</footer>
+</div><!-- /site-content -->
+
+<div id="edit-gear" title="Customize this site">✎</div>
+
+<div id="theme-panel">
+  <div style="color:var(--teal); font-weight:600;">Theme</div>
+  <div class="row"><span>Background</span><input type="color" id="th-bg"></div>
+  <div class="row"><span>Panel</span><input type="color" id="th-panel"></div>
+  <div class="row"><span>Text</span><input type="color" id="th-text"></div>
+  <div class="row"><span>Muted</span><input type="color" id="th-muted"></div>
+  <div class="row"><span>Amber accent</span><input type="color" id="th-amber"></div>
+  <div class="row"><span>Teal accent</span><input type="color" id="th-teal"></div>
+  <div class="row"><span>Headline font</span>
+    <select id="th-font">
+      <option value="mono">JetBrains Mono</option>
+      <option value="sans">IBM Plex Sans</option>
+    </select>
+  </div>
 </div>
+
+<div id="edit-toolbar">
+  <span class="tag">EDIT MODE</span>
+  <button id="btn-theme">🎨 theme</button>
+  <button id="btn-save">💾 save</button>
+  <button id="btn-export">⇩ export</button>
+  <label class="filebtn">⇧ import<input type="file" id="file-import" accept="application/json"></label>
+  <button id="btn-reset" class="danger">↺ reset</button>
+  <button id="btn-exit">✕ exit</button>
+</div>
+
+<script>
+(function(){
+  /* ================= CUSTOMIZE / EDIT MODE ================= */
+  var LS_CONTENT = 'hm_site_content_v1';
+  var LS_THEME   = 'hm_site_theme_v1';
+  var EDITOR_PASSWORD = 'hardik2026'; // change this in the source before deploying publicly
+
+  var gear = document.getElementById('edit-gear');
+  var toolbar = document.getElementById('edit-toolbar');
+  var themePanel = document.getElementById('theme-panel');
+  var siteContent = document.getElementById('site-content');
+  var root = document.documentElement;
+
+  var THEME_VARS = ['bg','panel','text','muted','amber','teal'];
+
+  /* per-visitor auto theme: palette keyed off IP + current minute, so it
+     rotates live every minute. Overridden if the site owner has saved a
+     manual theme in this browser via edit mode. */
+  var LS_AUTO_THEME = 'hm_auto_theme_v1';
+  var AUTO_THEME_TTL = 60 * 1000;
+  var PRESET_THEMES = [
+    { bg:'#0a0f1a', panel:'#111a2b', 'panel-raised':'#16223a', line:'#223049', text:'#e7ecf3', muted:'#7c8aa5', amber:'#f2b84b', teal:'#5eead4' },
+    { bg:'#0a1414', panel:'#0f1f1f', 'panel-raised':'#152b2b', line:'#1f3d3d', text:'#e7f3f2', muted:'#7fa8a3', amber:'#ff8a65', teal:'#38bdf8' },
+    { bg:'#0d0d10', panel:'#161618', 'panel-raised':'#1e1e22', line:'#2c2c33', text:'#eceef2', muted:'#8b8fa3', amber:'#c8ff4d', teal:'#ff5ec4' },
+    { bg:'#120a14', panel:'#1c1220', 'panel-raised':'#26182c', line:'#3a2542', text:'#f3e9f5', muted:'#ab93b5', amber:'#ffd166', teal:'#5eead4' },
+    { bg:'#070b14', panel:'#0e1626', 'panel-raised':'#142238', line:'#203352', text:'#e7edf7', muted:'#7f93b8', amber:'#ff9f43', teal:'#22d3ee' },
+    { bg:'#0a120d', panel:'#0f1c14', 'panel-raised':'#16281c', line:'#223a2c', text:'#e7f3ea', muted:'#82a893', amber:'#f2b84b', teal:'#6ee7b7' },
+    { bg:'#140a0c', panel:'#201114', 'panel-raised':'#2b171b', line:'#452530', text:'#f5eaec', muted:'#b08e96', amber:'#ffb454', teal:'#ff6f91' },
+    { bg:'#0a0e18', panel:'#121a2c', 'panel-raised':'#1a2540', line:'#2c3a5c', text:'#eaeef7', muted:'#8b96b8', amber:'#ffcb6b', teal:'#7dd3fc' },
+    { bg:'#140f08', panel:'#211a0f', 'panel-raised':'#2c2415', line:'#453820', text:'#f5f0e6', muted:'#b3a688', amber:'#ff9f5a', teal:'#8fd694' },
+    { bg:'#0d0f11', panel:'#161a1d', 'panel-raised':'#1f2529', line:'#333c42', text:'#ecf0f2', muted:'#8c98a0', amber:'#ffdd57', teal:'#5ee7ff' },
+    { bg:'#061218', panel:'#0a1e28', 'panel-raised':'#0f2a38', line:'#1c465a', text:'#e5f3f8', muted:'#7fadc0', amber:'#ff8f6b', teal:'#4ce0d2' },
+    { bg:'#110a16', panel:'#1b1122', 'panel-raised':'#25172e', line:'#3c2648', text:'#f2e9f5', muted:'#a692b3', amber:'#ff8fb1', teal:'#c6f24b' },
+    { bg:'#0b0c10', panel:'#141620', 'panel-raised':'#1c1f2c', line:'#2f3346', text:'#eceef3', muted:'#8d92a8', amber:'#f2b84b', teal:'#a78bfa' },
+    { bg:'#120c08', panel:'#1e150d', 'panel-raised':'#291d12', line:'#452f1c', text:'#f5eee4', muted:'#b39c82', amber:'#ff8452', teal:'#48c9b0' },
+    { bg:'#070d16', panel:'#0d1626', 'panel-raised':'#132038', line:'#20365c', text:'#e8eef8', muted:'#7f92b5', amber:'#5aa9ff', teal:'#ff7ac6' },
+    { bg:'#08140f', panel:'#0d2018', 'panel-raised':'#132c21', line:'#20493a', text:'#e6f5ee', muted:'#7fb39c', amber:'#ffe08a', teal:'#4ce0a0' }
+  ];
+
+  function applyAutoTheme(theme){
+    if(!theme) return;
+    Object.keys(theme).forEach(function(k){ root.style.setProperty('--' + k, theme[k]); });
+  }
+
+  function getOrAssignAutoTheme(){
+    try{
+      var saved = JSON.parse(localStorage.getItem(LS_AUTO_THEME) || 'null');
+      if(saved && saved.theme && saved.assignedAt && (Date.now() - saved.assignedAt) < AUTO_THEME_TTL){
+        return saved.theme;
+      }
+    }catch(e){}
+    var theme = PRESET_THEMES[Math.floor(Math.random() * PRESET_THEMES.length)];
+    try{ localStorage.setItem(LS_AUTO_THEME, JSON.stringify({ theme: theme, assignedAt: Date.now() })); }catch(e){}
+    return theme;
+  }
+
+  function currentMinuteKey(){
+    return Math.floor(Date.now() / 60000).toString();
+  }
+
+  /* deterministic theme per visitor IP, keyed to the current minute so the
+     same IP still lands on a new palette roughly every 60 seconds */
+  function ipHashToTheme(ip){
+    var key = ip + '-' + currentMinuteKey();
+    var h = 0;
+    for(var i = 0; i < key.length; i++){ h = (h * 31 + key.charCodeAt(i)) >>> 0; }
+    return PRESET_THEMES[h % PRESET_THEMES.length];
+  }
+
+  var currentIp = null;
+
+  function applyThemeForNow(){
+    if(currentIp){ applyAutoTheme(ipHashToTheme(currentIp)); }
+    else { applyAutoTheme(getOrAssignAutoTheme()); }
+  }
+
+  function applyIpBasedTheme(){
+    return fetch('https://api.ipify.org?format=json', { cache: 'no-store' })
+      .then(function(res){ return res.json(); })
+      .then(function(data){ if(data && data.ip){ currentIp = data.ip; } })
+      .catch(function(){
+        // offline, blocked, or the third-party lookup failed — fall back to a per-browser random theme
+      })
+      .then(function(){
+        applyThemeForNow();
+        // keep it rotating live while the page stays open, aligned to the wall-clock minute
+        var msToNextMinute = 60000 - (Date.now() % 60000);
+        setTimeout(function(){
+          applyThemeForNow();
+          setInterval(applyThemeForNow, 60000);
+        }, msToNextMinute);
+      });
+  }
+
+  function applyTheme(theme){
+    if(!theme) return;
+    THEME_VARS.forEach(function(k){
+      if(theme[k]) root.style.setProperty('--'+k, theme[k]);
+    });
+    if(theme.font === 'sans'){
+      document.querySelectorAll('h1.name, .logo, .status-line, .role-line b, .h2, .eyebrow, .proj-title, .tl-org, .tl-date, .contact-title, .btn, .diagram-bar, .node-label').forEach(function(el){
+        el.style.fontFamily = 'var(--sans)';
+      });
+    }
+  }
+
+  function currentThemeFromInputs(){
+    return {
+      bg: document.getElementById('th-bg').value,
+      panel: document.getElementById('th-panel').value,
+      text: document.getElementById('th-text').value,
+      muted: document.getElementById('th-muted').value,
+      amber: document.getElementById('th-amber').value,
+      teal: document.getElementById('th-teal').value,
+      font: document.getElementById('th-font').value
+    };
+  }
+
+  function hexFromVar(name, fallback){
+    var v = getComputedStyle(root).getPropertyValue('--'+name).trim();
+    return v || fallback;
+  }
+
+  function initThemeInputs(saved){
+    var t = saved || {
+      bg: hexFromVar('bg','#0a0f1a'), panel: hexFromVar('panel','#111a2b'),
+      text: hexFromVar('text','#e7ecf3'), muted: hexFromVar('muted','#7c8aa5'),
+      amber: hexFromVar('amber','#f2b84b'), teal: hexFromVar('teal','#5eead4'), font: 'mono'
+    };
+    document.getElementById('th-bg').value = t.bg;
+    document.getElementById('th-panel').value = t.panel;
+    document.getElementById('th-text').value = t.text;
+    document.getElementById('th-muted').value = t.muted;
+    document.getElementById('th-amber').value = t.amber;
+    document.getElementById('th-teal').value = t.teal;
+    document.getElementById('th-font').value = t.font || 'mono';
+  }
+
+  /* ---- restore any previously saved edits, on every load ---- */
+  try{
+    var savedContent = localStorage.getItem(LS_CONTENT);
+    if(savedContent) siteContent.innerHTML = savedContent;
+  }catch(e){}
+  var manualTheme = null;
+  try{ manualTheme = JSON.parse(localStorage.getItem(LS_THEME) || 'null'); }catch(e){}
+  if(manualTheme){
+    applyTheme(manualTheme);
+    initThemeInputs(manualTheme);
+  } else {
+    initThemeInputs(null);
+    applyIpBasedTheme().then(function(){ initThemeInputs(null); });
+  }
+
+  /* ---- delete + add affordances, (re)applied whenever edit mode is turned on ---- */
+  function ensureDelButtons(){
+    document.querySelectorAll('.proj-card, .cert-card, .tl-item').forEach(function(el){
+      if(!el.querySelector(':scope > .del-btn')){
+        var b = document.createElement('span');
+        b.className = 'del-btn'; b.textContent = '×'; b.title = 'Remove this';
+        b.onclick = function(e){ e.stopPropagation(); if(confirm('Remove this item?')) el.remove(); };
+        el.appendChild(b);
+      }
+    });
+    document.querySelectorAll('.chip:not(.add-chip-btn)').forEach(function(el){
+      if(!el.querySelector('.chip-del')){
+        var s = document.createElement('span');
+        s.className = 'chip-del'; s.textContent = '×';
+        s.onclick = function(e){ e.stopPropagation(); el.remove(); };
+        el.appendChild(s);
+      }
+    });
+  }
+
+  function ensureAddButton(container, key, label, factory){
+    if(!container) return;
+    if(container.querySelector('.add-btn.'+key)) return;
+    var btn = document.createElement('button');
+    btn.className = 'add-btn ' + key;
+    btn.textContent = label;
+    btn.onclick = function(){ factory(container); ensureDelButtons(); };
+    container.appendChild(btn);
+  }
+
+  function ensureAddChipButtons(){
+    document.querySelectorAll('.skill-cat .chips').forEach(function(chipsEl){
+      if(chipsEl.querySelector('.add-chip-btn')) return;
+      var b = document.createElement('span');
+      b.className = 'chip add-chip-btn';
+      b.style.display = 'none';
+      b.textContent = '+ add';
+      b.onclick = function(){
+        var txt = prompt('New skill / tool name:');
+        if(txt){
+          var c = document.createElement('span');
+          c.className = 'chip';
+          c.textContent = txt;
+          chipsEl.insertBefore(c, b);
+          ensureDelButtons();
+        }
+      };
+      chipsEl.appendChild(b);
+    });
+  }
+
+  function ensureAllAffordances(){
+    ensureDelButtons();
+    ensureAddChipButtons();
+
+    var projGrid = document.querySelector('#projects .proj-grid');
+    ensureAddButton(projGrid, 'add-proj', '+ add project card', function(container){
+      var tpl = container.querySelector('.proj-card');
+      if(!tpl) return;
+      var clone = tpl.cloneNode(true);
+      clone.querySelectorAll('.del-btn, .chip-del').forEach(function(x){ x.remove(); });
+      var title = clone.querySelector('.proj-title'); if(title) title.textContent = 'New project';
+      var tag = clone.querySelector('.proj-tag'); if(tag) tag.textContent = 'new';
+      var desc = clone.querySelector('.proj-desc'); if(desc) desc.textContent = 'Describe the project here.';
+      var link = clone.querySelector('.proj-link'); if(link){ link.textContent = 'add link ↗'; link.href = '#'; }
+      container.insertBefore(clone, container.querySelector('.add-btn'));
+    });
+
+    var ossGrid = document.querySelector('#oss .proj-grid');
+    ensureAddButton(ossGrid, 'add-oss', '+ add contribution', function(container){
+      var tpl = container.querySelector('.proj-card');
+      if(!tpl) return;
+      var clone = tpl.cloneNode(true);
+      clone.querySelectorAll('.del-btn, .chip-del').forEach(function(x){ x.remove(); });
+      var title = clone.querySelector('.proj-title'); if(title) title.textContent = 'org/repo-name';
+      var desc = clone.querySelector('.proj-desc'); if(desc) desc.textContent = 'Describe the contribution here.';
+      var link = clone.querySelector('.proj-link'); if(link){ link.textContent = 'view PR ↗'; link.href = '#'; }
+      container.insertBefore(clone, container.querySelector('.add-btn'));
+    });
+
+    var timeline = document.querySelector('.timeline');
+    ensureAddButton(timeline, 'add-role', '+ add role', function(container){
+      var tpl = container.querySelector('.tl-item');
+      if(!tpl) return;
+      var clone = tpl.cloneNode(true);
+      clone.querySelectorAll('.del-btn').forEach(function(x){ x.remove(); });
+      var date = clone.querySelector('.tl-date'); if(date) date.textContent = '20XX — Present';
+      var role = clone.querySelector('.tl-role'); if(role) role.textContent = 'New role';
+      var org = clone.querySelector('.tl-org'); if(org) org.textContent = 'Company · Location';
+      var list = clone.querySelector('.tl-desc'); if(list) list.innerHTML = '<li>What you did.</li>';
+      container.insertBefore(clone, container.querySelector('.add-btn'));
+    });
+
+    var certRow = document.querySelector('.cert-row');
+    ensureAddButton(certRow, 'add-cert', '+ add certification', function(container){
+      var tpl = container.querySelector('.cert-card');
+      if(!tpl) return;
+      var clone = tpl.cloneNode(true);
+      clone.querySelectorAll('.del-btn').forEach(function(x){ x.remove(); });
+      var name = clone.querySelector('.cert-name'); if(name) name.textContent = 'New certification';
+      var org = clone.querySelector('.cert-org'); if(org) org.textContent = 'Issuing organization';
+      var link = clone.querySelector('.cert-link'); if(link) link.remove();
+      container.appendChild(clone);
+    });
+  }
+
+  function showAddChipButtons(show){
+    document.querySelectorAll('.add-chip-btn').forEach(function(b){ b.style.display = show ? 'inline-block' : 'none'; });
+  }
+
+  /* ---- link editing helper: alt-click any link in edit mode to change its URL ---- */
+  siteContent.addEventListener('click', function(e){
+    if(!document.body.classList.contains('edit-mode')) return;
+    var a = e.target.closest('a');
+    if(a && e.altKey){
+      e.preventDefault();
+      var url = prompt('Set URL for this link:', a.getAttribute('href') || '');
+      if(url !== null) a.setAttribute('href', url);
+    } else if(a){
+      e.preventDefault(); // avoid navigating away while editing text
+    }
+  });
+
+  /* ---- edit mode toggle ---- */
+  function enterEditMode(){
+    document.body.classList.add('edit-mode');
+    siteContent.setAttribute('contenteditable', 'true');
+    toolbar.classList.add('on');
+    gear.style.display = 'none';
+    ensureAllAffordances();
+    showAddChipButtons(true);
+  }
+  function exitEditMode(){
+    document.body.classList.remove('edit-mode');
+    siteContent.removeAttribute('contenteditable');
+    toolbar.classList.remove('on');
+    themePanel.classList.remove('on');
+    gear.style.display = 'flex';
+    showAddChipButtons(false);
+  }
+
+  gear.addEventListener('click', function(){
+    var pw = prompt('Enter the edit password for this site:');
+    if(pw === null) return;
+    if(pw === EDITOR_PASSWORD){ enterEditMode(); }
+    else { alert('Incorrect password.'); }
+  });
+
+  document.getElementById('btn-exit').addEventListener('click', exitEditMode);
+
+  document.getElementById('btn-theme').addEventListener('click', function(){
+    themePanel.classList.toggle('on');
+  });
+
+  THEME_VARS.concat(['font']).forEach(function(key){
+    var el = document.getElementById('th-' + key);
+    if(el) el.addEventListener('input', function(){ applyTheme(currentThemeFromInputs()); });
+  });
+
+  document.getElementById('btn-save').addEventListener('click', function(){
+    try{
+      localStorage.setItem(LS_CONTENT, siteContent.innerHTML);
+      localStorage.setItem(LS_THEME, JSON.stringify(currentThemeFromInputs()));
+      alert('Saved — your changes will persist in this browser on this device.');
+    }catch(e){
+      alert('Could not save (browser storage may be full or disabled).');
+    }
+  });
+
+  document.getElementById('btn-export').addEventListener('click', function(){
+    var data = {
+      content: siteContent.innerHTML,
+      theme: currentThemeFromInputs()
+    };
+    var blob = new Blob([JSON.stringify(data)], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'site-content-backup.json';
+    a.click();
+  });
+
+  document.getElementById('file-import').addEventListener('change', function(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      try{
+        var data = JSON.parse(reader.result);
+        if(data.content){
+          siteContent.innerHTML = data.content;
+          localStorage.setItem(LS_CONTENT, data.content);
+        }
+        if(data.theme){
+          applyTheme(data.theme);
+          initThemeInputs(data.theme);
+          localStorage.setItem(LS_THEME, JSON.stringify(data.theme));
+        }
+        ensureAllAffordances();
+        showAddChipButtons(document.body.classList.contains('edit-mode'));
+        alert('Imported. Click "save" if you want this to persist here too.');
+      }catch(err){
+        alert('That file did not look like a valid export.');
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', function(){
+    if(confirm('Reset to the original default content and theme? This clears your saved changes on this device.')){
+      localStorage.removeItem(LS_CONTENT);
+      localStorage.removeItem(LS_THEME);
+      localStorage.removeItem(LS_AUTO_THEME);
+      location.reload();
+    }
+  });
+})();
+</script>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var statusEl = document.getElementById('trace-status');
+  var clockEl = document.getElementById('trace-clock');
+  var startedAt = Date.now();
+  setInterval(function(){
+    if(!clockEl) return;
+    var s = Math.floor((Date.now() - startedAt) / 1000);
+    var mm = String(Math.floor(s / 60)).padStart(2, '0');
+    var ss = String(s % 60).padStart(2, '0');
+    clockEl.textContent = mm + ':' + ss;
+  }, 1000);
+
+  /* custom highlight order: terraform, mcp agent, claude api, gitops, ec2, eks, bedrock, infra live */
+  var ORDER = ['n3', 'n5', 'n7', 'n4', 'n1', 'n2', 'n6', 'n8'];
+  var STATUS_MESSAGES = [
+    'terraform plan → apply',
+    'mcp agent routing tool call',
+    'claude api inference',
+    'gitops sync',
+    'provisioning ec2',
+    'reconciling eks',
+    'bedrock model warm',
+    'infra check: healthy ✓'
+  ];
+  var EDGE_MAP = {
+    f1: ['n1', 'n3'], f2: ['n2', 'n4'], f3: ['n3', 'n5'], f4: ['n4', 'n5'],
+    f5: ['n5', 'n6'], f6: ['n5', 'n7'], f7: ['n6', 'n8'], f8: ['n7', 'n8']
+  };
+
+  function setActive(id, cls){
+    var g = document.getElementById(id);
+    if(!g) return;
+    var c = g.querySelector('.node-circle');
+    var t = g.querySelectorAll('.node-label');
+    c.classList.add(cls || 'active');
+    t.forEach(function(el){ el.classList.add('active'); });
+  }
+
+  function clearAll(){
+    document.querySelectorAll('.node-circle').forEach(function(c){ c.classList.remove('active','amber-active'); });
+    document.querySelectorAll('.node-label').forEach(function(l){ l.classList.remove('active'); });
+    document.querySelectorAll('.edge-flow').forEach(function(e){ e.classList.remove('on'); });
+  }
+
+  function run(step){
+    if(reduce){
+      // Show final state once, no looping animation
+      ORDER.forEach(function(n){ setActive(n, n === 'n8' ? 'amber-active' : 'active'); });
+      Object.keys(EDGE_MAP).forEach(function(id){ document.getElementById(id).classList.add('on'); });
+      if(statusEl) statusEl.textContent = STATUS_MESSAGES[STATUS_MESSAGES.length - 1];
+      return;
+    }
+    if(step === 0) clearAll();
+    if(statusEl) statusEl.textContent = STATUS_MESSAGES[step];
+
+    var activatedSoFar = ORDER.slice(0, step + 1);
+    var currentNode = ORDER[step];
+    setActive(currentNode, currentNode === 'n8' ? 'amber-active' : 'active');
+
+    // an edge lights up once both nodes it connects have been activated,
+    // regardless of which order they appeared in
+    Object.keys(EDGE_MAP).forEach(function(id){
+      var pair = EDGE_MAP[id];
+      if(activatedSoFar.indexOf(pair[0]) !== -1 && activatedSoFar.indexOf(pair[1]) !== -1){
+        var el = document.getElementById(id);
+        if(el) el.classList.add('on');
+      }
+    });
+
+    setTimeout(function(){
+      var next = (step + 1) % ORDER.length;
+      if(next === 0){
+        setTimeout(function(){ run(0); }, 900);
+      } else {
+        run(next);
+      }
+    }, 750);
+  }
+
+  run(0);
+})();
+</script>
+
+</body>
+</html>
