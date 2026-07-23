@@ -284,9 +284,8 @@
   .contact-links a{ font-family: var(--mono); font-size: 14px; color: var(--text); }
   .contact-links a:hover{ color: var(--teal); }
   .contact-qr{ display:flex; flex-direction:column; align-items:center; gap:8px; }
-  .contact-qr img{ width:120px; height:120px; border-radius: var(--radius); border:1px solid var(--line); background:#fff; padding:6px; display:block; }
-  .contact-qr p{ font-family: var(--mono); font-size: 11px; color: var(--muted); text-align:center; max-width:130px; }
-  @media (max-width: 640px){ .contact-qr{ align-items:flex-start; } .contact-qr p{ text-align:left; } }
+  .contact-qr a{ display:inline-flex; align-items:center; gap:6px; }
+  @media (max-width: 640px){ .contact-qr{ align-items:flex-start; } }
   .foot-note{ margin-top: 48px; font-family: var(--mono); font-size: 11.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; }
 
 </style>
@@ -686,8 +685,10 @@
       <div class="contact-title">Building infrastructure that responds to <span class="teal">plain-language intent.</span> Let's talk.</div>
       <div class="contact-links">
         <div class="contact-qr">
-          <p>Scan to schedule a Zoom meeting</p>
-          <a href="https://scheduler.zoom.us/hardik-maru/30-mins-with-hardik" target="_blank" rel="noopener">Zoom invite ↗</a>
+          <a href="https://scheduler.zoom.us/hardik-maru/30-mins-with-hardik" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="6" fill="#2D8CFF"/><path d="M6 8.5A1.5 1.5 0 0 1 7.5 7h6A1.5 1.5 0 0 1 15 8.5v7A1.5 1.5 0 0 1 13.5 17h-6A1.5 1.5 0 0 1 6 15.5v-7Z" fill="#fff"/><path d="M16 10.2 19.1 8a.6.6 0 0 1 .9.5v7a.6.6 0 0 1-.9.5L16 13.8v-3.6Z" fill="#fff"/></svg>
+            Zoom invite ↗
+          </a>
         </div>
         <a href="https://linkedin.com/in/hardik-maru-1a220462" target="_blank" rel="noopener">linkedin.com/in/hardik-maru-1a220462 ↗</a>
         <a href="https://github.com/Hardikrepo" target="_blank" rel="noopener">github.com/Hardikrepo ↗</a>
